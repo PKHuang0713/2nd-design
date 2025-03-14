@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Shirt, Home, Brain, Info, User, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
@@ -39,10 +38,8 @@ const CollapsibleSidebar = () => {
     return location.pathname === path;
   };
   
-  // When sidebar is collapsed, we show a minimal version
   const isCollapsed = state === "collapsed";
   
-  // Determine icon size based on sidebar state
   const iconSize = isCollapsed ? 24 : 20;
   
   return (
@@ -52,11 +49,7 @@ const CollapsibleSidebar = () => {
       >
         <div className="h-16 border-b border-border flex items-center px-6">
           <Link to="/" className="flex items-center gap-2">
-            {isCollapsed ? (
-              <img src="/lovable-uploads/52ab9fb4-a88b-4dfa-b07c-e7107854cc01.png" alt="Clothify Logo" className="w-8 h-8" />
-            ) : (
-              <img src="/lovable-uploads/52ab9fb4-a88b-4dfa-b07c-e7107854cc01.png" alt="Clothify Logo" className="h-8" />
-            )}
+            <Shirt className="w-6 h-6 text-wardrobe-blue" />
             {!isCollapsed && <span className="font-semibold text-lg">Clothify</span>}
           </Link>
           
@@ -128,7 +121,6 @@ const CollapsibleSidebar = () => {
         </nav>
       </aside>
       
-      {/* Add a floating expand button that shows only when sidebar is collapsed */}
       {isCollapsed && (
         <div className="fixed left-16 top-5 z-20">
           <Button 
