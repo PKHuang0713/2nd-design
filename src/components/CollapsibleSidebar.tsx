@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, Home, Brain, Info, User, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Shirt, Home, Brain, Info, User, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from './ui/button';
 import { useSidebar } from './ui/sidebar';
 
@@ -52,7 +52,7 @@ const CollapsibleSidebar = () => {
       >
         <div className="h-16 border-b border-border flex items-center px-6">
           <Link to="/" className="flex items-center gap-2">
-            <Heart className="w-6 h-6 text-wardrobe-red" />
+            <Shirt className="w-6 h-6 text-wardrobe-blue" />
             {!isCollapsed && <span className="font-semibold text-lg">Clothify</span>}
           </Link>
           
@@ -77,7 +77,7 @@ const CollapsibleSidebar = () => {
             />
             <SidebarItem 
               to="/wardrobe" 
-              icon={<Heart size={iconSize} />} 
+              icon={<Shirt size={iconSize} />} 
               label="Wardrobe" 
               active={isActive('/wardrobe')} 
               isCollapsed={isCollapsed}
