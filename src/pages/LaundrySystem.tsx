@@ -90,15 +90,13 @@ const LaundrySystem = () => {
           <CardTitle className="text-lg flex items-center gap-2">
             <Shirt className="h-5 w-5 text-wardrobe-blue" />
             {item.name}
-          </CardTitle>
-          <div className="flex items-center gap-2">
             {item.favorite && (
               <Heart size={16} className="text-wardrobe-red" fill="currentColor" />
             )}
-            <Badge variant="outline" className={getStatusColor(item.status)}>
-              {getStatusIcon(item.status)} {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-            </Badge>
-          </div>
+          </CardTitle>
+          <Badge variant="outline" className={getStatusColor(item.status)}>
+            {getStatusIcon(item.status)} {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+          </Badge>
         </div>
         <CardDescription className="flex items-center gap-1">
           <span>{item.type}</span>
