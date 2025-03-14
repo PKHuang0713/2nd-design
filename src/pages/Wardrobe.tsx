@@ -89,7 +89,7 @@ const Wardrobe = () => {
     { id: 'short-sleeve', name: 'Short Sleeve', icon: <Shirt size={18} /> },
     { id: 'long-pants', name: 'Long Pants', icon: <Shirt size={18} /> },
     { id: 'short-pants', name: 'Short Pants', icon: <Shirt size={18} /> },
-    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} className="rotate-180" /> }, // Using rotated shirt to simulate a hoodie
+    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> }, // Reverted back to original icon
     { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
     { id: 'hats', name: 'Hats', icon: <HardHat size={18} /> },
