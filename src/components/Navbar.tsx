@@ -5,7 +5,7 @@ import { Bell, User } from 'lucide-react';
 
 const Navbar = () => {
   return (
-    <footer className="h-16 border-t border-border bg-white">
+    <header className="h-16 border-b border-border bg-white">
       <div className="flex items-center justify-end h-full px-6">
         <div className="flex items-center space-x-4">
           <button className="p-2 rounded-full hover:bg-muted transition-colors">
@@ -19,7 +19,7 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-    </footer>
+    </header>
   );
 };
 

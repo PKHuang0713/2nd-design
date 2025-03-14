@@ -18,12 +18,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-wardrobe-background flex">
       {!isAuthPage && <Sidebar />}
       <div className="flex-1 flex flex-col">
+        {!isAuthPage && <Navbar />}
         <main className="flex-grow p-6">
           <div className="page-transition">
             {children}
           </div>
         </main>
-        {!isAuthPage && <Navbar />}
       </div>
     </div>
   );
