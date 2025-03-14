@@ -46,7 +46,7 @@ const CollapsibleSidebar = () => {
   return (
     <>
       <aside 
-        className={`${isCollapsed ? 'w-16' : 'w-64'} min-h-screen bg-white border-r border-border transition-all duration-300 ease-in-out`}
+        className={`${isCollapsed ? 'w-16' : 'w-64'} min-h-screen bg-white border-r border-border transition-all duration-300 ease-in-out relative`}
       >
         <div className="h-16 border-b border-border flex items-center px-6">
           <Link to="/" className={`flex items-center gap-2 ${isCollapsed ? 'justify-center w-full' : ''}`}>
@@ -123,7 +123,7 @@ const CollapsibleSidebar = () => {
       </aside>
       
       {isCollapsed && (
-        <div className="fixed left-16 top-1/2 -translate-y-1/2 z-20">
+        <div className="fixed left-16 top-4 z-20">
           <Button 
             size="icon" 
             variant="outline" 
