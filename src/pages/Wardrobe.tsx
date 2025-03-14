@@ -31,6 +31,33 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
+const colorMap: Record<string, string> = {
+  'black': '#000000',
+  'white': '#FFFFFF',
+  'red': '#E05D5D',
+  'blue': '#5F78A7',
+  'gray': '#808080',
+  'grey': '#808080',
+  'green': '#4CAF50',
+  'yellow': '#FFEB3B',
+  'purple': '#9C27B0',
+  'pink': '#E91E63',
+  'orange': '#FF9800',
+  'brown': '#795548',
+  'navy': '#000080',
+  'teal': '#008080',
+  'cyan': '#00BCD4',
+  'magenta': '#FF00FF',
+  'lime': '#CDDC39',
+  'olive': '#808000',
+  'maroon': '#800000',
+  'beige': '#F5F5DC',
+  'khaki': '#F0E68C',
+  'silver': '#C0C0C0',
+  'gold': '#FFD700',
+  'tan': '#D2B48C',
+};
+
 const Wardrobe = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [clothingItems, setClothingItems] = useState([
@@ -50,6 +77,11 @@ const Wardrobe = () => {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
+  const getColorCode = (colorName: string): string => {
+    const normalizedColor = colorName.toLowerCase();
+    return colorMap[normalizedColor] || '#CCCCCC'; // Default to gray if color not found
+  };
 
   const clothingCategories = [
     { id: 'long-sleeve', name: 'Long Sleeve', icon: <Shirt size={18} /> },
@@ -307,9 +339,16 @@ const Wardrobe = () => {
                 </div>
               </div>
               <h3 className="font-medium truncate">{item.name}</h3>
-              <div className="flex justify-between text-sm text-muted-foreground">
+              <div className="flex justify-between text-sm text-muted-foreground items-center">
                 <span>{item.type}</span>
-                <span>{item.color}</span>
+                <div className="flex items-center gap-1">
+                  <div 
+                    className="w-4 h-4 rounded-full border border-gray-200" 
+                    style={{ backgroundColor: getColorCode(item.color) }}
+                    title={item.color}
+                  />
+                  <span>{item.color}</span>
+                </div>
               </div>
             </div>
           ))}
