@@ -21,18 +21,13 @@ const AI = () => {
         },
         {
           id: 2,
-          name: "Casual 2",
-          items: ["Blue T-Shirt", "Black Jeans", "White Sneakers"]
+          name: "Dressy 1",
+          items: ["White Shirt", "Black Dress Pants", "Black Dress Shoes"]
         },
         {
           id: 3,
-          name: "Casual 3",
+          name: "Casual 2",
           items: ["Gray Hoodie", "Blue Jeans", "White Sneakers"]
-        },
-        {
-          id: 4,
-          name: "Dressy 1",
-          items: ["White Shirt", "Black Dress Pants", "Black Dress Shoes"]
         }
       ];
       
@@ -82,7 +77,7 @@ const AI = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {outfits.map((outfit) => (
             <div key={outfit.id} className="glass-card p-5 hover:shadow-lg transition-shadow">
               <div className="mb-4">
