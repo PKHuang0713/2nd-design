@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Shirt, Heart, Shield, Clock } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 const About = () => {
   return (
@@ -66,9 +67,8 @@ const About = () => {
           <p className="text-muted-foreground mb-6">
             We're on a mission to transform how people interact with their wardrobes. Join thousands of users who have simplified their clothing management with Clothify.
           </p>
-          <div className="flex justify-center gap-4">
-            <button className="btn-primary">Sign Up Now</button>
-            <button className="btn-outline">Contact Us</button>
+          <div className="flex justify-center">
+            <Button className="btn-primary">Sign Up Now</Button>
           </div>
         </div>
       </div>
