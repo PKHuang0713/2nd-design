@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Check } from 'lucide-react';
@@ -69,13 +70,10 @@ const Index = () => {
         <footer className="pt-20 pb-10">
           <div className="border-t border-border pt-10">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <div className="flex items-center gap-2">
                 <Shirt className="w-5 h-5 text-wardrobe-blue" />
                 <span className="font-semibold">Clothify</span>
               </div>
-              <p className="text-sm text-muted-foreground">
-                © 2023 Clothify. All rights reserved.
-              </p>
             </div>
           </div>
         </footer>
