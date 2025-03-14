@@ -1,11 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
-import { Shirt, Sparkles, RefreshCw } from 'lucide-react';
+import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat } from 'lucide-react';
 import { toast } from "sonner";
 
 const AI = () => {
   const [loading, setLoading] = useState(false);
-  const [outfits, setOutfits] = useState<Array<{id: number, name: string, items: string[]}>>([]);
+  const [outfits, setOutfits] = useState<Array<{id: number, name: string, items: string[], types: string[]}>>([]); 
+
+  // Get appropriate icon for clothing type
+  const getClothingIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'bags':
+        return <Backpack className="w-8 h-8 text-muted-foreground" />;
+      case 'shoes':
+        return <Footprints className="w-8 h-8 text-muted-foreground" />;
+      case 'hats':
+        return <HardHat className="w-8 h-8 text-muted-foreground" />;
+      default:
+        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+    }
+  };
 
   // Mock AI generation
   const generateOutfits = () => {
@@ -24,6 +38,14 @@ const AI = () => {
             "Silver Watch", 
             "Black Belt", 
             "Gray Socks"
+          ],
+          types: [
+            "Short Sleeve",
+            "Long Pants",
+            "Shoes",
+            "Accessories",
+            "Accessories",
+            "Accessories"
           ]
         },
         {
@@ -36,6 +58,14 @@ const AI = () => {
             "Black Belt", 
             "Silver Tie Clip", 
             "Black Socks"
+          ],
+          types: [
+            "Long Sleeve",
+            "Long Pants",
+            "Shoes",
+            "Accessories",
+            "Accessories",
+            "Accessories"
           ]
         },
         {
@@ -48,6 +78,14 @@ const AI = () => {
             "Black Beanie", 
             "Silver Chain", 
             "White Socks"
+          ],
+          types: [
+            "Outerwear",
+            "Long Pants",
+            "Shoes",
+            "Hats",
+            "Accessories",
+            "Accessories"
           ]
         }
       ];
@@ -109,9 +147,9 @@ const AI = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                  {outfit.items.map((item, i) => (
                     <div key={i} className="aspect-square bg-muted rounded-lg flex items-center justify-center">
-                      <Shirt className="w-8 h-8 text-muted-foreground" />
+                      {getClothingIcon(outfit.types[i])}
                     </div>
                   ))}
                 </div>
