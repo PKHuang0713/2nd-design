@@ -300,9 +300,6 @@ const AI = () => {
                   </div>
                 ))}
               </div>
-              <button className="w-full btn-outline mt-4 text-sm">
-                View Details
-              </button>
             </div>
           ))}
         </div>
