@@ -17,17 +17,38 @@ const AI = () => {
         {
           id: 1,
           name: "Casual 1",
-          items: ["Black T-Shirt", "Blue Jeans", "White Sneakers"]
+          items: [
+            "Black T-Shirt", 
+            "Blue Jeans", 
+            "White Sneakers", 
+            "Silver Watch", 
+            "Black Belt", 
+            "Gray Socks"
+          ]
         },
         {
           id: 2,
           name: "Dressy 1",
-          items: ["White Shirt", "Black Dress Pants", "Black Dress Shoes"]
+          items: [
+            "White Shirt", 
+            "Black Dress Pants", 
+            "Black Dress Shoes", 
+            "Black Belt", 
+            "Silver Tie Clip", 
+            "Black Socks"
+          ]
         },
         {
           id: 3,
           name: "Casual 2",
-          items: ["Gray Hoodie", "Blue Jeans", "White Sneakers"]
+          items: [
+            "Gray Hoodie", 
+            "Blue Jeans", 
+            "White Sneakers", 
+            "Black Beanie", 
+            "Silver Chain", 
+            "White Socks"
+          ]
         }
       ];
       
