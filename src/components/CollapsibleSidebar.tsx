@@ -123,7 +123,7 @@ const CollapsibleSidebar = () => {
       </aside>
       
       {isCollapsed && (
-        <div className="fixed left-16 top-5 z-20">
+        <div className="fixed left-16 top-1/2 -translate-y-1/2 z-20">
           <Button 
             size="icon" 
             variant="outline" 
