@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat } from 'lucide-react';
 import { toast } from "sonner";
@@ -40,62 +39,56 @@ const AI = () => {
       const newOutfits = [
         {
           id: 1,
-          name: "Casual 1",
+          name: "Casual Outfit",
           items: [
             "Black T-Shirt", 
             "Blue Jeans", 
             "White Sneakers", 
             "Brown Backpack", 
-            "Gray Beanie", 
-            "Black Shorts"
+            "Gray Beanie"
           ],
           types: [
             "Short Sleeve",
             "Long Pants",
             "Shoes",
             "Bags",
-            "Hats",
-            "Short Pants"
+            "Hats"
           ]
         },
         {
           id: 2,
-          name: "Dressy 1",
+          name: "Business Casual",
           items: [
-            "White Shirt", 
-            "Black Dress Pants", 
-            "Black Dress Shoes", 
-            "Navy Blazer", 
-            "Black Hat", 
-            "Leather Messenger Bag"
+            "White Dress Shirt", 
+            "Navy Chinos", 
+            "Brown Loafers", 
+            "Leather Messenger Bag", 
+            "Navy Blazer"
           ],
           types: [
             "Long Sleeve",
             "Long Pants",
             "Shoes",
-            "Outerwear",
-            "Hats",
-            "Bags"
+            "Bags",
+            "Outerwear"
           ]
         },
         {
           id: 3,
-          name: "Casual 2",
+          name: "Summer Look",
           items: [
-            "Gray Hoodie", 
-            "Blue Jeans", 
-            "White Sneakers", 
-            "Black Beanie", 
-            "Canvas Tote Bag", 
-            "Khaki Shorts"
+            "Striped T-Shirt", 
+            "Khaki Shorts", 
+            "Canvas Sneakers", 
+            "Straw Hat", 
+            "Canvas Tote Bag"
           ],
           types: [
-            "Outerwear",
-            "Long Pants",
+            "Short Sleeve",
+            "Short Pants",
             "Shoes",
             "Hats",
-            "Bags",
-            "Short Pants"
+            "Bags"
           ]
         }
       ];
