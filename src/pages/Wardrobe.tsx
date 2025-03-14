@@ -11,7 +11,8 @@ import {
   Sliders,
   Check,
   Backpack,
-  Footprints
+  Footprints,
+  GraduationCap
 } from 'lucide-react';
 import { toast } from "sonner";
 import {
@@ -60,6 +61,7 @@ const Wardrobe = () => {
     { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
     { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
+    { id: 'hats', name: 'Hats', icon: <GraduationCap size={18} /> },
   ];
 
   const handleAddItem = () => {
