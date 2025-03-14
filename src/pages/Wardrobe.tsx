@@ -7,19 +7,40 @@ import {
   X, 
   Save, 
   Trash, 
-  Filter
+  Filter,
+  Sliders,
+  Check,
+  ShoppingBag,
+  Footprints,
+  Hat
 } from 'lucide-react';
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Wardrobe = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [clothingItems, setClothingItems] = useState([
-    { id: 1, name: 'Black T-Shirt', type: 'Top', color: 'Black', season: 'All' },
-    { id: 2, name: 'Blue Jeans', type: 'Bottom', color: 'Blue', season: 'All' },
+    { id: 1, name: 'Black T-Shirt', type: 'Short Sleeve', color: 'Black', season: 'All' },
+    { id: 2, name: 'Blue Jeans', type: 'Long Pants', color: 'Blue', season: 'All' },
     { id: 3, name: 'White Sneakers', type: 'Shoes', color: 'White', season: 'Spring/Summer' },
     { id: 4, name: 'Gray Hoodie', type: 'Outerwear', color: 'Gray', season: 'Fall/Winter' },
     { id: 5, name: 'Black Dress', type: 'Dress', color: 'Black', season: 'All' },
-    { id: 6, name: 'Blue T-Shirt', type: 'Top', color: 'Blue', season: 'Spring/Summer' }
+    { id: 6, name: 'Blue T-Shirt', type: 'Short Sleeve', color: 'Blue', season: 'Spring/Summer' }
   ]);
   const [searchTerm, setSearchTerm] = useState('');
   const [newItem, setNewItem] = useState({
@@ -28,6 +49,20 @@ const Wardrobe = () => {
     color: '',
     season: ''
   });
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
+  // Define clothing categories
+  const clothingCategories = [
+    { id: 'long-sleeve', name: 'Long Sleeve', icon: <Shirt size={18} /> },
+    { id: 'short-sleeve', name: 'Short Sleeve', icon: <Shirt size={18} /> },
+    { id: 'long-pants', name: 'Long Pants', icon: <Shirt size={18} /> },
+    { id: 'short-pants', name: 'Short Pants', icon: <Shirt size={18} /> },
+    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
+    { id: 'bags', name: 'Bags', icon: <ShoppingBag size={18} /> },
+    { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
+    { id: 'hats', name: 'Hats', icon: <Hat size={18} /> },
+  ];
 
   const handleAddItem = () => {
     if (!newItem.name || !newItem.type) {
@@ -52,15 +87,41 @@ const Wardrobe = () => {
     toast.success('Item removed successfully');
   };
 
+  const toggleFilter = (filterId: string) => {
+    setSelectedFilters(prev => {
+      if (prev.includes(filterId)) {
+        return prev.filter(id => id !== filterId);
+      } else {
+        return [...prev, filterId];
+      }
+    });
+  };
+
   const filteredItems = clothingItems.filter(item => {
     const searchLower = searchTerm.toLowerCase();
-    return (
+    const matchesSearch = 
       item.name.toLowerCase().includes(searchLower) ||
       item.type.toLowerCase().includes(searchLower) ||
       item.color.toLowerCase().includes(searchLower) ||
-      item.season.toLowerCase().includes(searchLower)
-    );
+      item.season.toLowerCase().includes(searchLower);
+    
+    // If no filters are selected or the item type matches one of the selected filters
+    const matchesFilter = 
+      selectedFilters.length === 0 || 
+      selectedFilters.some(filter => 
+        item.type.toLowerCase().includes(filter.toLowerCase().replace('-', ' '))
+      );
+    
+    return matchesSearch && matchesFilter;
   });
+
+  const handleCloseFilters = () => {
+    setShowFilters(false);
+  };
+
+  const handleTypeSelect = (value: string) => {
+    setNewItem({ ...newItem, type: value });
+  };
 
   return (
     <div className="wardrobe-container py-8 md:py-12 animate-fade-in">
@@ -94,9 +155,58 @@ const Wardrobe = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="btn-outline flex items-center gap-2">
-            <Filter size={18} /> Filters
-          </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="btn-outline flex items-center gap-2">
+                <Filter size={18} /> Filters
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Filter Items</DialogTitle>
+              </DialogHeader>
+              <div className="py-4">
+                <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+                  <Sliders size={16} /> Categories
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {clothingCategories.map((category) => (
+                    <div 
+                      key={category.id}
+                      className={`flex items-center space-x-2 p-2 rounded-md cursor-pointer border ${
+                        selectedFilters.includes(category.id) 
+                          ? 'border-wardrobe-blue bg-wardrobe-lightBlue/20' 
+                          : 'border-border'
+                      }`}
+                      onClick={() => toggleFilter(category.id)}
+                    >
+                      <div className="flex items-center gap-2">
+                        {category.icon}
+                        <span className="text-sm">{category.name}</span>
+                      </div>
+                      {selectedFilters.includes(category.id) && (
+                        <Check size={16} className="text-wardrobe-blue ml-auto" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-4">
+                <button 
+                  className="btn-outline"
+                  onClick={() => setSelectedFilters([])}
+                >
+                  Clear All
+                </button>
+                <button 
+                  className="btn-primary"
+                  onClick={() => {}}
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -116,13 +226,21 @@ const Wardrobe = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium mb-1">Clothing Type</label>
-              <input
-                type="text"
-                placeholder="Clothing Type"
-                className="form-input"
-                value={newItem.type}
-                onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
-              />
+              <Select onValueChange={handleTypeSelect}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select clothing type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clothingCategories.map((category) => (
+                    <SelectItem key={category.id} value={category.name}>
+                      <div className="flex items-center gap-2">
+                        {category.icon}
+                        <span>{category.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Item Name</label>
@@ -207,11 +325,11 @@ const Wardrobe = () => {
           <Shirt className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-medium mb-2">No items found</h3>
           <p className="text-muted-foreground mb-4">
-            {searchTerm
+            {searchTerm || selectedFilters.length > 0
               ? "No items match your search criteria"
               : "You haven't added any clothing items yet"}
           </p>
-          {!searchTerm && (
+          {!searchTerm && selectedFilters.length === 0 && (
             <button
               onClick={() => setShowAddForm(true)}
               className="btn-primary inline-flex items-center gap-2"
