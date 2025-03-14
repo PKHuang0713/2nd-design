@@ -110,40 +110,6 @@ const AI = () => {
           ))}
         </div>
       )}
-
-      {/* AI Features */}
-      <div className="mt-12">
-        <h2 className="text-xl font-semibold mb-6">How AI Helps Your Style</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass-card p-6">
-            <div className="rounded-full bg-primary/10 p-3 w-fit mb-4">
-              <Sparkles className="w-6 h-6 text-wardrobe-blue" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">Smart Recommendations</h3>
-            <p className="text-muted-foreground">
-              Our AI analyzes your wardrobe and suggests outfits that complement your style.
-            </p>
-          </div>
-          <div className="glass-card p-6">
-            <div className="rounded-full bg-primary/10 p-3 w-fit mb-4">
-              <Sparkles className="w-6 h-6 text-wardrobe-blue" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">Occasion-Based Styling</h3>
-            <p className="text-muted-foreground">
-              Get recommendations for different occasions - casual, formal, business, and more.
-            </p>
-          </div>
-          <div className="glass-card p-6">
-            <div className="rounded-full bg-primary/10 p-3 w-fit mb-4">
-              <Sparkles className="w-6 h-6 text-wardrobe-blue" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">Seasonal Suggestions</h3>
-            <p className="text-muted-foreground">
-              Receive season-appropriate outfit ideas based on current weather trends.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
