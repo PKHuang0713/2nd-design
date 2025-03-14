@@ -30,68 +30,65 @@ const AI = () => {
     }
   };
 
+  // Generate a random number between min and max (inclusive)
+  const getRandomItemCount = () => {
+    return Math.floor(Math.random() * 4) + 3; // Random number between 3-6
+  };
+
   // Mock AI generation
   const generateOutfits = () => {
     setLoading(true);
     
     // Simulate API call delay
     setTimeout(() => {
-      const newOutfits = [
-        {
-          id: 1,
-          name: "Casual Outfit",
-          items: [
-            "Black T-Shirt", 
-            "Blue Jeans", 
-            "White Sneakers", 
-            "Brown Backpack", 
-            "Gray Beanie"
-          ],
-          types: [
-            "Short Sleeve",
-            "Long Pants",
-            "Shoes",
-            "Bags",
-            "Hats"
-          ]
-        },
-        {
-          id: 2,
-          name: "Business Casual",
-          items: [
-            "White Dress Shirt", 
-            "Navy Chinos", 
-            "Brown Loafers", 
-            "Leather Messenger Bag", 
-            "Navy Blazer"
-          ],
-          types: [
-            "Long Sleeve",
-            "Long Pants",
-            "Shoes",
-            "Bags",
-            "Outerwear"
-          ]
-        },
-        {
-          id: 3,
-          name: "Summer Look",
-          items: [
-            "Striped T-Shirt", 
-            "Khaki Shorts", 
-            "Canvas Sneakers", 
-            "Straw Hat", 
-            "Canvas Tote Bag"
-          ],
-          types: [
-            "Short Sleeve",
-            "Short Pants",
-            "Shoes",
-            "Hats",
-            "Bags"
-          ]
-        }
+      // Clothing items and types pools to randomly select from
+      const clothingItems = {
+        "Short Sleeve": ["Black T-Shirt", "Striped T-Shirt", "Graphic Tee", "Polo Shirt", "Printed T-Shirt"],
+        "Long Sleeve": ["White Dress Shirt", "Flannel Shirt", "Henley", "Oxford Shirt", "Turtleneck"],
+        "Long Pants": ["Blue Jeans", "Navy Chinos", "Black Trousers", "Khaki Pants", "Corduroy Pants"],
+        "Short Pants": ["Khaki Shorts", "Denim Shorts", "Swim Trunks", "Athletic Shorts", "Cargo Shorts"],
+        "Shoes": ["White Sneakers", "Brown Loafers", "Canvas Sneakers", "Leather Boots", "Sandals"],
+        "Bags": ["Brown Backpack", "Leather Messenger Bag", "Canvas Tote Bag", "Gym Bag", "Laptop Bag"],
+        "Hats": ["Gray Beanie", "Straw Hat", "Baseball Cap", "Fedora", "Sun Hat"],
+        "Outerwear": ["Navy Blazer", "Denim Jacket", "Leather Jacket", "Windbreaker", "Puffer Coat"]
+      };
+      
+      // Outfit themes
+      const outfitThemes = [
+        "Casual Outfit", 
+        "Business Casual",
+        "Summer Look",
+        "Urban Style",
+        "Outdoor Adventure",
+        "Weekend Getaway"
       ];
+      
+      // Generate 3 random outfits
+      const newOutfits = Array(3).fill(0).map((_, index) => {
+        // Get random number of items (3-6)
+        const itemCount = getRandomItemCount();
+        
+        // Select unique clothing types for this outfit
+        const allTypes = Object.keys(clothingItems);
+        const shuffledTypes = [...allTypes].sort(() => 0.5 - Math.random());
+        const selectedTypes = shuffledTypes.slice(0, itemCount);
+        
+        // Select random items for each chosen type
+        const selectedItems = selectedTypes.map(type => {
+          const itemsOfType = clothingItems[type as keyof typeof clothingItems];
+          return itemsOfType[Math.floor(Math.random() * itemsOfType.length)];
+        });
+        
+        // Select random outfit name
+        const outfitName = outfitThemes[Math.floor(Math.random() * outfitThemes.length)];
+        
+        return {
+          id: index + 1,
+          name: outfitName,
+          items: selectedItems,
+          types: selectedTypes
+        };
+      });
       
       setOutfits(newOutfits);
       setLoading(false);
