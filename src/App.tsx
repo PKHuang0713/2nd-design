@@ -13,6 +13,7 @@ import Wardrobe from "./pages/Wardrobe";
 import AI from "./pages/AI";
 import About from "./pages/About";
 import Account from "./pages/Account";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/ai" element={<AI />} />
             <Route path="/about" element={<About />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
