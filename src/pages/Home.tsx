@@ -45,10 +45,7 @@ const Home = () => {
                 <Shirt className="w-8 h-8 text-wardrobe-blue" />
               </div>
               <div className="flex flex-col sm:flex-row gap-2 w-full mt-2">
-                <Link to="/wardrobe" className="btn-primary flex-1 flex items-center justify-center">
-                  <Shirt className="w-4 h-4 mr-2" /> Wardrobe
-                </Link>
-                <Link to="/ai" className="btn-outline flex-1 flex items-center justify-center">
+                <Link to="/ai" className="btn-primary flex-1 flex items-center justify-center">
                   <Search className="w-4 h-4 mr-2" /> Suggestions
                 </Link>
               </div>
