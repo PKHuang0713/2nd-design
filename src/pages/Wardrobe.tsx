@@ -12,7 +12,7 @@ import {
   Check,
   Backpack,
   Footprints,
-  GraduationCap
+  HardHat  // Changed from GraduationCap to HardHat which looks more like a cap
 } from 'lucide-react';
 import { toast } from "sonner";
 import {
@@ -61,7 +61,7 @@ const Wardrobe = () => {
     { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
     { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
-    { id: 'hats', name: 'Hats', icon: <GraduationCap size={18} /> },
+    { id: 'hats', name: 'Hats', icon: <HardHat size={18} /> },  // Changed from GraduationCap to HardHat
   ];
 
   const handleAddItem = () => {
