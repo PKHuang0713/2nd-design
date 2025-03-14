@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -112,18 +113,6 @@ const LaundrySystem = () => {
         </div>
       </CardContent>
       <CardFooter className="flex flex-wrap gap-2 pt-2">
-        {!item.favorite && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => toggleFavorite(item.id)}
-            className="bg-pink-100 text-pink-800 hover:bg-pink-200"
-          >
-            <Heart className="h-4 w-4 mr-2" /> 
-            Add to Favorites
-          </Button>
-        )}
-        
         {item.status !== 'dirty' && (
           <Button 
             variant="outline" 
