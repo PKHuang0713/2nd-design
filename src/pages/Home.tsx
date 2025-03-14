@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shirt, Upload, Search, ArrowRight } from 'lucide-react';
+import { Shirt, Upload, Search, ArrowRight, ShoppingBag } from 'lucide-react';
 
 const Home = () => {
   // Mock clothing data
@@ -31,7 +31,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Link to="/wardrobe" className="blue-card hover:opacity-95 transition-opacity">
             <div className="flex flex-col items-center text-center">
-              <Shirt className="w-8 h-8 mb-3" />
+              <ShoppingBag className="w-8 h-8 mb-3" />
               <h3 className="text-lg font-medium mb-2">My Wardrobe</h3>
               <p className="text-white/80 text-sm">
                 View and manage all your clothing items
@@ -42,7 +42,7 @@ const Home = () => {
           <div className="glass-card p-6 hover:shadow-lg transition-shadow">
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-wardrobe-lightBlue rounded-full flex items-center justify-center mb-3">
-                <Shirt className="w-8 h-8 text-wardrobe-blue" />
+                <ShoppingBag className="w-8 h-8 text-wardrobe-blue" />
               </div>
               <div className="flex flex-col sm:flex-row gap-2 w-full mt-2">
                 <Link to="/ai" className="btn-primary flex-1 flex items-center justify-center">
@@ -103,7 +103,7 @@ const Home = () => {
               <div className="grid grid-cols-2 gap-3">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center">
-                    <Shirt className="w-10 h-10 text-muted-foreground" />
+                    <ShoppingBag className="w-10 h-10 text-muted-foreground" />
                   </div>
                 ))}
               </div>
