@@ -52,7 +52,11 @@ const CollapsibleSidebar = () => {
       >
         <div className="h-16 border-b border-border flex items-center px-6">
           <Link to="/" className="flex items-center gap-2">
-            <Shirt className="w-6 h-6 text-wardrobe-blue" />
+            {isCollapsed ? (
+              <img src="/lovable-uploads/52ab9fb4-a88b-4dfa-b07c-e7107854cc01.png" alt="Clothify Logo" className="w-8 h-8" />
+            ) : (
+              <img src="/lovable-uploads/52ab9fb4-a88b-4dfa-b07c-e7107854cc01.png" alt="Clothify Logo" className="h-8" />
+            )}
             {!isCollapsed && <span className="font-semibold text-lg">Clothify</span>}
           </Link>
           
