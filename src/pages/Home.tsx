@@ -42,7 +42,7 @@ const Home = () => {
           <div className="glass-card p-6 hover:shadow-lg transition-shadow">
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-wardrobe-lightBlue rounded-full flex items-center justify-center mb-3">
-                <ShoppingBag className="w-8 h-8 text-wardrobe-blue" />
+                <Shirt className="w-8 h-8 text-wardrobe-blue" />
               </div>
               <div className="flex flex-col sm:flex-row gap-2 w-full mt-2">
                 <Link to="/ai" className="btn-primary flex-1 flex items-center justify-center">
@@ -103,7 +103,7 @@ const Home = () => {
               <div className="grid grid-cols-2 gap-3">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center">
-                    <ShoppingBag className="w-10 h-10 text-muted-foreground" />
+                    <Shirt className="w-10 h-10 text-muted-foreground" />
                   </div>
                 ))}
               </div>
