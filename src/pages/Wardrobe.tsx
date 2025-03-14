@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Shirt, 
@@ -11,9 +10,9 @@ import {
   Sliders,
   Check,
   Backpack,
-  Footprints,
-  HardHat  // Using HardHat as baseball cap icon (closest available in lucide-react)
+  Footprints
 } from 'lucide-react';
+import BaseballCap from '../components/icons/BaseballCap';
 import { toast } from "sonner";
 import {
   Select,
@@ -52,7 +51,6 @@ const Wardrobe = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-  // Define clothing categories
   const clothingCategories = [
     { id: 'long-sleeve', name: 'Long Sleeve', icon: <Shirt size={18} /> },
     { id: 'short-sleeve', name: 'Short Sleeve', icon: <Shirt size={18} /> },
@@ -61,7 +59,7 @@ const Wardrobe = () => {
     { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
     { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
-    { id: 'hats', name: 'Hats', icon: <HardHat size={18} /> },  // Baseball cap (using HardHat icon)
+    { id: 'hats', name: 'Hats', icon: <BaseballCap size={18} /> },  // Using custom BaseballCap icon
   ];
 
   const handleAddItem = () => {
@@ -105,7 +103,6 @@ const Wardrobe = () => {
       item.color.toLowerCase().includes(searchLower) ||
       item.season.toLowerCase().includes(searchLower);
     
-    // If no filters are selected or the item type matches one of the selected filters
     const matchesFilter = 
       selectedFilters.length === 0 || 
       selectedFilters.some(filter => 
@@ -142,7 +139,6 @@ const Wardrobe = () => {
         </div>
       </div>
 
-      {/* Search and filter */}
       <div className="glass-card p-4 mb-8">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-grow">
@@ -210,7 +206,6 @@ const Wardrobe = () => {
         </div>
       </div>
 
-      {/* Add form */}
       {showAddForm && (
         <div className="glass-card p-6 mb-8 animate-scale-in">
           <div className="flex justify-between items-center mb-4">
@@ -296,7 +291,6 @@ const Wardrobe = () => {
         </div>
       )}
 
-      {/* Items grid */}
       {filteredItems.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredItems.map((item) => (
