@@ -12,7 +12,8 @@ import {
   Check,
   Backpack,
   Footprints,
-  HardHat
+  HardHat,
+  ShoppingBag  // Added ShoppingBag for pants
 } from 'lucide-react';
 import { toast } from "sonner";
 import {
@@ -87,9 +88,9 @@ const Wardrobe = () => {
   const clothingCategories = [
     { id: 'long-sleeve', name: 'Long Sleeve', icon: <Shirt size={18} /> },
     { id: 'short-sleeve', name: 'Short Sleeve', icon: <Shirt size={18} /> },
-    { id: 'long-pants', name: 'Long Pants', icon: <Shirt size={18} /> },
-    { id: 'short-pants', name: 'Short Pants', icon: <Shirt size={18} /> },
-    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> }, // Reverted back to original icon
+    { id: 'long-pants', name: 'Long Pants', icon: <ShoppingBag size={18} /> },  // Updated to ShoppingBag
+    { id: 'short-pants', name: 'Short Pants', icon: <ShoppingBag size={18} /> }, // Updated to ShoppingBag
+    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
     { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
     { id: 'hats', name: 'Hats', icon: <HardHat size={18} /> },

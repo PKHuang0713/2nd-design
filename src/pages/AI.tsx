@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat } from 'lucide-react';
+import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat, ShoppingBag } from 'lucide-react';
 import { toast } from "sonner";
 
 const AI = () => {
@@ -20,9 +21,9 @@ const AI = () => {
       case 'short sleeve':
         return <Shirt className="w-8 h-8 text-muted-foreground" />;
       case 'long pants':
-        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+        return <ShoppingBag className="w-8 h-8 text-muted-foreground" />;
       case 'short pants':
-        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+        return <ShoppingBag className="w-8 h-8 text-muted-foreground" />;
       case 'outerwear':
         return <Shirt className="w-8 h-8 text-muted-foreground" />;
       default:
