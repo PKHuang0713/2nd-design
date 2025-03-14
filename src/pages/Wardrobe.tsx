@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Shirt, 
@@ -9,7 +10,7 @@ import {
   Filter,
   Sliders,
   Check,
-  ShoppingBag,
+  Backpack,
   Footprints
 } from 'lucide-react';
 import { toast } from "sonner";
@@ -57,7 +58,7 @@ const Wardrobe = () => {
     { id: 'long-pants', name: 'Long Pants', icon: <Shirt size={18} /> },
     { id: 'short-pants', name: 'Short Pants', icon: <Shirt size={18} /> },
     { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
-    { id: 'bags', name: 'Bags', icon: <ShoppingBag size={18} /> },
+    { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
   ];
 
