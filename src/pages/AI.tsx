@@ -109,7 +109,7 @@ const AI = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  {[1, 2, 3].map((i) => (
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
                     <div key={i} className="aspect-square bg-muted rounded-lg flex items-center justify-center">
                       <Shirt className="w-8 h-8 text-muted-foreground" />
                     </div>
