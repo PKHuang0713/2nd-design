@@ -69,7 +69,7 @@ const Index = () => {
         {/* Footer */}
         <footer className="pt-20 pb-10">
           <div className="border-t border-border pt-10">
-            <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex justify-center items-center">
               <div className="flex items-center gap-2">
                 <Shirt className="w-5 h-5 text-wardrobe-blue" />
                 <span className="font-semibold">Clothify</span>
