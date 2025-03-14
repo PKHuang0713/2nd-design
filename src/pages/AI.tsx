@@ -128,6 +128,19 @@ const AI = () => {
       )
     );
     
+    // Save to localStorage
+    const savedOutfitsJson = localStorage.getItem('savedOutfits');
+    const savedOutfits = savedOutfitsJson ? JSON.parse(savedOutfitsJson) : [];
+    
+    // Add the outfit to saved outfits with timestamp
+    const outfitToSave = {
+      ...selectedOutfit,
+      savedAt: new Date().toISOString()
+    };
+    
+    savedOutfits.push(outfitToSave);
+    localStorage.setItem('savedOutfits', JSON.stringify(savedOutfits));
+    
     // Close the dialog
     setShowSaveDialog(false);
     

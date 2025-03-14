@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shirt, Home, Brain, Info, User, ChevronRight, ChevronLeft, ShoppingBag, Droplets } from 'lucide-react';
+import { Shirt, Home, Brain, Info, User, ChevronRight, ChevronLeft, ShoppingBag, Droplets, BookmarkCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { useSidebar } from './ui/sidebar';
 
@@ -92,6 +92,13 @@ const CollapsibleSidebar = () => {
               icon={<Brain size={iconSize} />} 
               label="AI Suggestions" 
               active={isActive('/ai')} 
+              isCollapsed={isCollapsed}
+            />
+            <SidebarItem 
+              to="/saved-outfits" 
+              icon={<BookmarkCheck size={iconSize} />} 
+              label="Saved Outfits" 
+              active={isActive('/saved-outfits')} 
               isCollapsed={isCollapsed}
             />
             <SidebarItem 

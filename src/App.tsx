@@ -14,6 +14,7 @@ import AI from "./pages/AI";
 import About from "./pages/About";
 import Account from "./pages/Account";
 import LaundrySystem from "./pages/LaundrySystem";
+import SavedOutfits from "./pages/SavedOutfits";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/wardrobe" element={<Wardrobe />} />
             <Route path="/ai" element={<AI />} />
             <Route path="/laundry" element={<LaundrySystem />} />
+            <Route path="/saved-outfits" element={<SavedOutfits />} />
             <Route path="/about" element={<About />} />
             <Route path="/account" element={<Account />} />
             <Route path="*" element={<NotFound />} />
