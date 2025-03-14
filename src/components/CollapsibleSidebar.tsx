@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shirt, Home, Brain, Info, User, Settings, ChevronRight, ChevronLeft, ShoppingBag, Droplets } from 'lucide-react';
+import { Shirt, Home, Brain, Info, User, ChevronRight, ChevronLeft, ShoppingBag, Droplets } from 'lucide-react';
 import { Button } from './ui/button';
 import { useSidebar } from './ui/sidebar';
 
@@ -115,13 +115,6 @@ const CollapsibleSidebar = () => {
                 icon={<User size={iconSize} />} 
                 label="Account" 
                 active={isActive('/account')} 
-                isCollapsed={isCollapsed}
-              />
-              <SidebarItem 
-                to="/settings" 
-                icon={<Settings size={iconSize} />} 
-                label="Settings" 
-                active={isActive('/settings')} 
                 isCollapsed={isCollapsed}
               />
             </ul>

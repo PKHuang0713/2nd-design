@@ -13,7 +13,6 @@ import Wardrobe from "./pages/Wardrobe";
 import AI from "./pages/AI";
 import About from "./pages/About";
 import Account from "./pages/Account";
-import Settings from "./pages/Settings";
 import LaundrySystem from "./pages/LaundrySystem";
 import NotFound from "./pages/NotFound";
 
@@ -36,7 +35,6 @@ const App = () => (
             <Route path="/laundry" element={<LaundrySystem />} />
             <Route path="/about" element={<About />} />
             <Route path="/account" element={<Account />} />
-            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
