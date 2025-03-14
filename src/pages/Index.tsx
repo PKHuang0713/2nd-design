@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Check } from 'lucide-react';
@@ -14,7 +13,7 @@ const Index = () => {
               Manage Your Wardrobe, <span className="text-wardrobe-blue">Effortlessly</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-              ClothWise helps you organize your clothing items, create stunning outfits, and get personalized recommendations.
+              Clothify helps you organize your clothing items, create stunning outfits, and get personalized recommendations.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/signup" className="btn-primary text-lg px-8 py-3 flex items-center justify-center gap-2">
@@ -72,10 +71,10 @@ const Index = () => {
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="flex items-center gap-2 mb-4 md:mb-0">
                 <Shirt className="w-5 h-5 text-wardrobe-blue" />
-                <span className="font-semibold">ClothWise</span>
+                <span className="font-semibold">Clothify</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                © 2023 ClothWise. All rights reserved.
+                © 2023 Clothify. All rights reserved.
               </p>
             </div>
           </div>

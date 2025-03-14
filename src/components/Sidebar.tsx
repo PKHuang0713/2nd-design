@@ -15,7 +15,7 @@ const Sidebar = () => {
       <div className="h-16 border-b border-border flex items-center px-6">
         <Link to="/" className="flex items-center gap-2">
           <Shirt className="w-6 h-6 text-wardrobe-blue" />
-          <span className="font-semibold text-lg">ClothWise</span>
+          <span className="font-semibold text-lg">Clothify</span>
         </Link>
       </div>
       <nav className="p-4">
