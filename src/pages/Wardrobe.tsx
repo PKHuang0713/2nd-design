@@ -10,9 +10,9 @@ import {
   Sliders,
   Check,
   Backpack,
-  Footprints
+  Footprints,
+  HardHat
 } from 'lucide-react';
-import BaseballCap from '../components/icons/BaseballCap';
 import { toast } from "sonner";
 import {
   Select,
@@ -59,7 +59,7 @@ const Wardrobe = () => {
     { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
     { id: 'bags', name: 'Bags', icon: <Backpack size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
-    { id: 'hats', name: 'Hats', icon: <BaseballCap size={18} /> },  // Using custom BaseballCap icon
+    { id: 'hats', name: 'Hats', icon: <HardHat size={18} /> },
   ];
 
   const handleAddItem = () => {
