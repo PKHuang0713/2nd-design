@@ -49,7 +49,7 @@ const CollapsibleSidebar = () => {
         className={`${isCollapsed ? 'w-16' : 'w-64'} min-h-screen bg-white border-r border-border transition-all duration-300 ease-in-out`}
       >
         <div className="h-16 border-b border-border flex items-center px-6">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className={`flex items-center gap-2 ${isCollapsed ? 'mx-auto' : ''}`}>
             <Shirt className="w-6 h-6 text-wardrobe-blue" />
             {!isCollapsed && <span className="font-semibold text-lg">Clothify</span>}
           </Link>
