@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Shirt, 
@@ -11,8 +10,7 @@ import {
   Sliders,
   Check,
   ShoppingBag,
-  Footprints,
-  Hat
+  Footprints
 } from 'lucide-react';
 import { toast } from "sonner";
 import {
@@ -61,7 +59,6 @@ const Wardrobe = () => {
     { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={18} /> },
     { id: 'bags', name: 'Bags', icon: <ShoppingBag size={18} /> },
     { id: 'shoes', name: 'Shoes', icon: <Footprints size={18} /> },
-    { id: 'hats', name: 'Hats', icon: <Hat size={18} /> },
   ];
 
   const handleAddItem = () => {
