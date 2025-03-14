@@ -6,7 +6,7 @@ const About = () => {
   return (
     <div className="wardrobe-container py-8 md:py-12 animate-fade-in">
       <div className="blue-card mb-8 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold mb-4">About ClothWise</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-4">About Clothify</h1>
         <p className="text-white/80 max-w-2xl mx-auto">
           Simplifying wardrobe management with intelligent organization and AI-powered recommendations.
         </p>
@@ -16,7 +16,7 @@ const About = () => {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-xl font-semibold mb-4">Our Mission</h2>
           <p className="text-muted-foreground mb-6">
-            ClothWise was created with a simple goal: to help people organize their wardrobes more efficiently and make better fashion choices. We believe that a well-organized wardrobe leads to less stress, more creativity, and more sustainable clothing habits.
+            Clothify was created with a simple goal: to help people organize their wardrobes more efficiently and make better fashion choices. We believe that a well-organized wardrobe leads to less stress, more creativity, and more sustainable clothing habits.
           </p>
           
           <h2 className="text-xl font-semibold mb-4">What We Offer</h2>
@@ -64,7 +64,7 @@ const About = () => {
           <Shirt className="w-12 h-12 text-wardrobe-blue mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-4">Join Us</h2>
           <p className="text-muted-foreground mb-6">
-            We're on a mission to transform how people interact with their wardrobes. Join thousands of users who have simplified their clothing management with ClothWise.
+            We're on a mission to transform how people interact with their wardrobes. Join thousands of users who have simplified their clothing management with Clothify.
           </p>
           <div className="flex justify-center gap-4">
             <button className="btn-primary">Sign Up Now</button>
