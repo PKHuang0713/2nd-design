@@ -1,10 +1,22 @@
+
 import React, { useState, useEffect } from 'react';
-import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat } from 'lucide-react';
+import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat, Heart } from 'lucide-react';
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const AI = () => {
   const [loading, setLoading] = useState(false);
-  const [outfits, setOutfits] = useState<Array<{id: number, name: string, items: string[], types: string[]}>>([]); 
+  const [outfits, setOutfits] = useState<Array<{id: number, name: string, items: string[], types: string[], saved: boolean}>>([]); 
+  const [selectedOutfit, setSelectedOutfit] = useState<{id: number, name: string, items: string[], types: string[]} | null>(null);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
 
   // Get appropriate icon for clothing type
   const getClothingIcon = (type: string) => {
@@ -86,7 +98,8 @@ const AI = () => {
           id: index + 1,
           name: outfitName,
           items: selectedItems,
-          types: selectedTypes
+          types: selectedTypes,
+          saved: false
         };
       });
       
@@ -94,6 +107,32 @@ const AI = () => {
       setLoading(false);
       toast.success("AI suggestions generated!");
     }, 1500);
+  };
+
+  // Handle saving an outfit
+  const handleSaveOutfit = (outfit: {id: number, name: string, items: string[], types: string[]}) => {
+    setSelectedOutfit(outfit);
+    setShowSaveDialog(true);
+  };
+
+  // Confirm saving an outfit
+  const confirmSaveOutfit = () => {
+    if (!selectedOutfit) return;
+    
+    // Update the outfits list to mark this outfit as saved
+    setOutfits(prevOutfits => 
+      prevOutfits.map(outfit => 
+        outfit.id === selectedOutfit.id 
+        ? {...outfit, saved: true} 
+        : outfit
+      )
+    );
+    
+    // Close the dialog
+    setShowSaveDialog(false);
+    
+    // Show success message
+    toast.success("Outfit saved to your collection!");
   };
 
   useEffect(() => {
@@ -142,9 +181,20 @@ const AI = () => {
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-medium">{outfit.name}</h3>
-                  <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
-                    AI Generated
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
+                      AI Generated
+                    </span>
+                    <button 
+                      onClick={() => handleSaveOutfit(outfit)}
+                      className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-muted transition-colors"
+                      aria-label="Save outfit"
+                    >
+                      <Heart 
+                        className={`w-5 h-5 ${outfit.saved ? 'fill-rose-500 text-rose-500' : 'text-muted-foreground'}`} 
+                      />
+                    </button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {outfit.items.map((item, i) => (
@@ -169,6 +219,41 @@ const AI = () => {
           ))}
         </div>
       )}
+
+      {/* Save Outfit Dialog */}
+      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save Outfit</DialogTitle>
+            <DialogDescription>
+              This outfit will be saved to your personal collection.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedOutfit && (
+            <div className="py-4">
+              <h3 className="font-medium mb-2">{selectedOutfit.name}</h3>
+              <div className="space-y-2 text-sm mb-4">
+                {selectedOutfit.items.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-wardrobe-blue"></div>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <div className="flex justify-end gap-2 mt-4">
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button onClick={confirmSaveOutfit}>
+              Save to Collection
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
