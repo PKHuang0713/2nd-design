@@ -48,7 +48,7 @@ const Settings = () => {
             <SettingsItem 
               icon={<HelpCircle className="w-5 h-5 text-wardrobe-blue" />} 
               title="Help & Support"
-              description="Get help with using ClothWise"
+              description="Get help with using Clothify"
             />
           </div>
         </div>
