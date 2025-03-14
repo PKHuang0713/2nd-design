@@ -16,6 +16,16 @@ const AI = () => {
         return <Footprints className="w-8 h-8 text-muted-foreground" />;
       case 'hats':
         return <HardHat className="w-8 h-8 text-muted-foreground" />;
+      case 'long sleeve':
+        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+      case 'short sleeve':
+        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+      case 'long pants':
+        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+      case 'short pants':
+        return <Shirt className="w-8 h-8 text-muted-foreground" />;
+      case 'outerwear':
+        return <Shirt className="w-8 h-8 text-muted-foreground" />;
       default:
         return <Shirt className="w-8 h-8 text-muted-foreground" />;
     }
@@ -35,17 +45,17 @@ const AI = () => {
             "Black T-Shirt", 
             "Blue Jeans", 
             "White Sneakers", 
-            "Silver Watch", 
-            "Black Belt", 
-            "Gray Socks"
+            "Brown Backpack", 
+            "Gray Beanie", 
+            "Black Shorts"
           ],
           types: [
             "Short Sleeve",
             "Long Pants",
             "Shoes",
-            "Accessories",
-            "Accessories",
-            "Accessories"
+            "Bags",
+            "Hats",
+            "Short Pants"
           ]
         },
         {
@@ -55,17 +65,17 @@ const AI = () => {
             "White Shirt", 
             "Black Dress Pants", 
             "Black Dress Shoes", 
-            "Black Belt", 
-            "Silver Tie Clip", 
-            "Black Socks"
+            "Navy Blazer", 
+            "Black Hat", 
+            "Leather Messenger Bag"
           ],
           types: [
             "Long Sleeve",
             "Long Pants",
             "Shoes",
-            "Accessories",
-            "Accessories",
-            "Accessories"
+            "Outerwear",
+            "Hats",
+            "Bags"
           ]
         },
         {
@@ -76,16 +86,16 @@ const AI = () => {
             "Blue Jeans", 
             "White Sneakers", 
             "Black Beanie", 
-            "Silver Chain", 
-            "White Socks"
+            "Canvas Tote Bag", 
+            "Khaki Shorts"
           ],
           types: [
             "Outerwear",
             "Long Pants",
             "Shoes",
             "Hats",
-            "Accessories",
-            "Accessories"
+            "Bags",
+            "Short Pants"
           ]
         }
       ];
