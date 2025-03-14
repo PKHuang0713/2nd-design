@@ -11,7 +11,8 @@ import {
   Check,
   Backpack,
   Footprints,
-  HardHat
+  HardHat,
+  Heart
 } from 'lucide-react';
 import { toast } from "sonner";
 import {
@@ -58,25 +59,36 @@ const colorMap: Record<string, string> = {
   'tan': '#D2B48C',
 };
 
+interface ClothingItem {
+  id: number;
+  name: string;
+  type: string;
+  color: string;
+  season: string;
+  favorite?: boolean;
+}
+
 const Wardrobe = () => {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [clothingItems, setClothingItems] = useState([
-    { id: 1, name: 'Black T-Shirt', type: 'Short Sleeve', color: 'Black', season: 'All' },
-    { id: 2, name: 'Blue Jeans', type: 'Long Pants', color: 'Blue', season: 'All' },
-    { id: 3, name: 'White Sneakers', type: 'Shoes', color: 'White', season: 'Spring/Summer' },
-    { id: 4, name: 'Gray Hoodie', type: 'Outerwear', color: 'Gray', season: 'Fall/Winter' },
-    { id: 5, name: 'Black Dress', type: 'Dress', color: 'Black', season: 'All' },
-    { id: 6, name: 'Blue T-Shirt', type: 'Short Sleeve', color: 'Blue', season: 'Spring/Summer' }
+  const [clothingItems, setClothingItems] = useState<ClothingItem[]>([
+    { id: 1, name: 'Black T-Shirt', type: 'Short Sleeve', color: 'Black', season: 'All', favorite: false },
+    { id: 2, name: 'Blue Jeans', type: 'Long Pants', color: 'Blue', season: 'All', favorite: true },
+    { id: 3, name: 'White Sneakers', type: 'Shoes', color: 'White', season: 'Spring/Summer', favorite: false },
+    { id: 4, name: 'Gray Hoodie', type: 'Outerwear', color: 'Gray', season: 'Fall/Winter', favorite: false },
+    { id: 5, name: 'Black Dress', type: 'Dress', color: 'Black', season: 'All', favorite: true },
+    { id: 6, name: 'Blue T-Shirt', type: 'Short Sleeve', color: 'Blue', season: 'Spring/Summer', favorite: false }
   ]);
   const [searchTerm, setSearchTerm] = useState('');
   const [newItem, setNewItem] = useState({
     name: '',
     type: '',
     color: '',
-    season: ''
+    season: '',
+    favorite: false
   });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const getColorCode = (colorName: string): string => {
     const normalizedColor = colorName.toLowerCase();
@@ -107,7 +119,7 @@ const Wardrobe = () => {
       { id: newId, ...newItem }
     ]);
     
-    setNewItem({ name: '', type: '', color: '', season: '' });
+    setNewItem({ name: '', type: '', color: '', season: '', favorite: false });
     setShowAddForm(false);
     toast.success('Item added successfully');
   };
@@ -115,6 +127,18 @@ const Wardrobe = () => {
   const handleDeleteItem = (id: number) => {
     setClothingItems(clothingItems.filter(item => item.id !== id));
     toast.success('Item removed successfully');
+  };
+
+  const toggleFavorite = (id: number) => {
+    setClothingItems(clothingItems.map(item => 
+      item.id === id ? { ...item, favorite: !item.favorite } : item
+    ));
+    
+    const item = clothingItems.find(item => item.id === id);
+    if (item) {
+      const action = !item.favorite ? 'added to' : 'removed from';
+      toast.success(`${item.name} ${action} favorites`);
+    }
   };
 
   const toggleFilter = (filterId: string) => {
@@ -141,7 +165,9 @@ const Wardrobe = () => {
         item.type.toLowerCase().includes(filter.toLowerCase().replace('-', ' '))
       );
     
-    return matchesSearch && matchesFilter;
+    const matchesFavorite = !showFavoritesOnly || item.favorite;
+    
+    return matchesSearch && matchesFilter && matchesFavorite;
   });
 
   const handleCloseFilters = () => {
@@ -218,11 +244,30 @@ const Wardrobe = () => {
                     </div>
                   ))}
                 </div>
+                
+                <div className="mt-6 border-t pt-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="favorites" 
+                      checked={showFavoritesOnly}
+                      onCheckedChange={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                    />
+                    <label 
+                      htmlFor="favorites"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                    >
+                      <Heart size={16} className="text-wardrobe-red" /> Show favorites only
+                    </label>
+                  </div>
+                </div>
               </div>
               <div className="flex justify-end gap-2 mt-4">
                 <button 
                   className="btn-outline"
-                  onClick={() => setSelectedFilters([])}
+                  onClick={() => {
+                    setSelectedFilters([]);
+                    setShowFavoritesOnly(false);
+                  }}
                 >
                   Clear All
                 </button>
@@ -306,6 +351,22 @@ const Wardrobe = () => {
             <p className="text-muted-foreground text-sm">Add image</p>
           </div>
 
+          <div className="flex items-center mb-4">
+            <Checkbox 
+              id="favorite-new" 
+              checked={newItem.favorite}
+              onCheckedChange={(checked) => 
+                setNewItem({ ...newItem, favorite: checked as boolean })
+              }
+            />
+            <label 
+              htmlFor="favorite-new"
+              className="ml-2 text-sm font-medium leading-none flex items-center gap-2"
+            >
+              <Heart size={16} className="text-wardrobe-red" /> Add to favorites
+            </label>
+          </div>
+
           <div className="flex justify-end gap-3">
             <button
               onClick={() => setShowAddForm(false)}
@@ -329,16 +390,29 @@ const Wardrobe = () => {
             <div key={item.id} className="glass-card p-4 hover:shadow-lg transition-all duration-300 group">
               <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
                 <Shirt className="w-16 h-16 text-muted-foreground" />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                  <button
+                    onClick={() => toggleFavorite(item.id)}
+                    className={`p-2 rounded-full ${item.favorite ? 'bg-wardrobe-red' : 'bg-gray-600'} text-white hover:bg-opacity-90 transition-colors`}
+                    title={item.favorite ? "Remove from favorites" : "Add to favorites"}
+                  >
+                    <Heart size={16} fill={item.favorite ? "white" : "none"} />
+                  </button>
                   <button
                     onClick={() => handleDeleteItem(item.id)}
                     className="p-2 rounded-full bg-wardrobe-red text-white hover:bg-red-600 transition-colors"
+                    title="Delete item"
                   >
                     <Trash size={16} />
                   </button>
                 </div>
               </div>
-              <h3 className="font-medium truncate">{item.name}</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="font-medium truncate">{item.name}</h3>
+                {item.favorite && (
+                  <Heart size={16} className="text-wardrobe-red" fill="currentColor" />
+                )}
+              </div>
               <div className="flex justify-between text-sm text-muted-foreground items-center">
                 <span>{item.type}</span>
                 <div className="flex items-center gap-1">
@@ -358,11 +432,11 @@ const Wardrobe = () => {
           <Shirt className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-medium mb-2">No items found</h3>
           <p className="text-muted-foreground mb-4">
-            {searchTerm || selectedFilters.length > 0
+            {searchTerm || selectedFilters.length > 0 || showFavoritesOnly
               ? "No items match your search criteria"
               : "You haven't added any clothing items yet"}
           </p>
-          {!searchTerm && selectedFilters.length === 0 && (
+          {!searchTerm && selectedFilters.length === 0 && !showFavoritesOnly && (
             <button
               onClick={() => setShowAddForm(true)}
               className="btn-primary inline-flex items-center gap-2"
@@ -377,3 +451,4 @@ const Wardrobe = () => {
 };
 
 export default Wardrobe;
+

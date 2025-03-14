@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Shirt, Droplets, Sun, Calendar, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { Shirt, Droplets, Sun, Calendar, Clock, CheckCircle, AlertCircle, Heart } from 'lucide-react';
 import { toast } from "sonner";
 
 interface LaundryItem {
@@ -13,14 +13,15 @@ interface LaundryItem {
   type: string;
   status: 'dirty' | 'washing' | 'drying' | 'clean';
   addedAt: Date;
+  favorite?: boolean;
 }
 
 const LaundrySystem = () => {
   const [laundryItems, setLaundryItems] = useState<LaundryItem[]>([
-    { id: '1', name: 'Blue T-Shirt', type: 'T-Shirt', status: 'dirty', addedAt: new Date(Date.now() - 86400000) },
-    { id: '2', name: 'Black Jeans', type: 'Pants', status: 'washing', addedAt: new Date(Date.now() - 43200000) },
-    { id: '3', name: 'White Socks', type: 'Socks', status: 'drying', addedAt: new Date(Date.now() - 21600000) },
-    { id: '4', name: 'Gray Hoodie', type: 'Outerwear', status: 'clean', addedAt: new Date() },
+    { id: '1', name: 'Blue T-Shirt', type: 'T-Shirt', status: 'dirty', addedAt: new Date(Date.now() - 86400000), favorite: true },
+    { id: '2', name: 'Black Jeans', type: 'Pants', status: 'washing', addedAt: new Date(Date.now() - 43200000), favorite: false },
+    { id: '3', name: 'White Socks', type: 'Socks', status: 'drying', addedAt: new Date(Date.now() - 21600000), favorite: false },
+    { id: '4', name: 'Gray Hoodie', type: 'Outerwear', status: 'clean', addedAt: new Date(), favorite: true },
   ]);
 
   const updateStatus = (id: string, newStatus: 'dirty' | 'washing' | 'drying' | 'clean') => {
@@ -37,6 +38,24 @@ const LaundrySystem = () => {
       toast(`${item.name} moved to ${newStatus} status`, {
         description: new Date().toLocaleTimeString(),
       });
+    }
+  };
+
+  const toggleFavorite = (id: string) => {
+    setLaundryItems(prev => 
+      prev.map(item => 
+        item.id === id 
+          ? { ...item, favorite: !item.favorite } 
+          : item
+      )
+    );
+    
+    const item = laundryItems.find(item => item.id === id);
+    if (item) {
+      const message = item.favorite 
+        ? `${item.name} removed from favorites`
+        : `${item.name} added to favorites`;
+      toast(message);
     }
   };
 
@@ -75,9 +94,14 @@ const LaundrySystem = () => {
             <Shirt className="h-5 w-5 text-wardrobe-blue" />
             {item.name}
           </CardTitle>
-          <Badge variant="outline" className={getStatusColor(item.status)}>
-            {getStatusIcon(item.status)} {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Badge>
+          <div className="flex items-center gap-2">
+            {item.favorite && (
+              <Heart size={16} className="text-wardrobe-red" fill="currentColor" />
+            )}
+            <Badge variant="outline" className={getStatusColor(item.status)}>
+              {getStatusIcon(item.status)} {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            </Badge>
+          </div>
         </div>
         <CardDescription className="flex items-center gap-1">
           <span>{item.type}</span>
@@ -91,7 +115,17 @@ const LaundrySystem = () => {
           <Clock className="h-3 w-3" /> Last updated: {item.addedAt.toLocaleTimeString()}
         </div>
       </CardContent>
-      <CardFooter className="flex gap-2 pt-2">
+      <CardFooter className="flex flex-wrap gap-2 pt-2">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => toggleFavorite(item.id)}
+          className={`${item.favorite ? 'bg-pink-100 text-pink-800' : 'bg-gray-100 text-gray-800'} hover:bg-opacity-90`}
+        >
+          <Heart className="h-4 w-4 mr-2" fill={item.favorite ? "currentColor" : "none"} /> 
+          {item.favorite ? "Unfavorite" : "Favorite"}
+        </Button>
+        
         {item.status !== 'dirty' && (
           <Button 
             variant="outline" 
@@ -150,6 +184,7 @@ const LaundrySystem = () => {
       <Tabs defaultValue="all" className="mt-6">
         <TabsList>
           <TabsTrigger value="all">All Items</TabsTrigger>
+          <TabsTrigger value="favorites">Favorites</TabsTrigger>
           <TabsTrigger value="dirty">Dirty</TabsTrigger>
           <TabsTrigger value="washing">Washing</TabsTrigger>
           <TabsTrigger value="drying">Drying</TabsTrigger>
@@ -160,6 +195,18 @@ const LaundrySystem = () => {
           {laundryItems.map(item => (
             <LaundryItemCard key={item.id} item={item} />
           ))}
+        </TabsContent>
+        
+        <TabsContent value="favorites" className="mt-4">
+          {laundryItems
+            .filter(item => item.favorite)
+            .map(item => <LaundryItemCard key={item.id} item={item} />)
+          }
+          {laundryItems.filter(item => item.favorite).length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              No favorite items yet
+            </div>
+          )}
         </TabsContent>
         
         {['dirty', 'washing', 'drying', 'clean'].map(status => (

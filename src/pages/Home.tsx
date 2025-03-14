@@ -1,10 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Upload, Search, ArrowRight, ShoppingBag } from 'lucide-react';
+import FavoriteItems from '../components/FavoriteItems';
 
 const Home = () => {
-  // Mock clothing data
+  // Mock clothing data with favorites
+  const [clothingItems, setClothingItems] = useState([
+    { id: 1, name: 'Black T-Shirt', type: 'Short Sleeve', color: 'Black', season: 'All', favorite: false },
+    { id: 2, name: 'Blue Jeans', type: 'Long Pants', color: 'Blue', season: 'All', favorite: true },
+    { id: 3, name: 'White Sneakers', type: 'Shoes', color: 'White', season: 'Spring/Summer', favorite: false },
+    { id: 4, name: 'Gray Hoodie', type: 'Outerwear', color: 'Gray', season: 'Fall/Winter', favorite: false },
+    { id: 5, name: 'Black Dress', type: 'Dress', color: 'Black', season: 'All', favorite: true },
+    { id: 6, name: 'Blue T-Shirt', type: 'Short Sleeve', color: 'Blue', season: 'Spring/Summer', favorite: false }
+  ]);
+
+  // Recent items (could be different from favorites)
   const recentItems = [
     { id: 1, name: 'Black Jacket', type: 'Outerwear' },
     { id: 2, name: 'White T-Shirt', type: 'Top' },
@@ -24,6 +35,9 @@ const Home = () => {
           </p>
         </div>
       </section>
+
+      {/* Favorite items section */}
+      <FavoriteItems items={clothingItems} title="My Favorites" showViewAll={true} limit={4} />
 
       {/* Quick actions */}
       <section className="mb-10">
