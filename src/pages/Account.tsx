@@ -69,7 +69,7 @@ const Account = () => {
 
       <div className="mt-12 text-center">
         <p className="text-xs text-muted-foreground">
-          © 2023 ClothWise. All rights reserved.
+          © 2023 Clothify. All rights reserved.
         </p>
       </div>
     </div>
