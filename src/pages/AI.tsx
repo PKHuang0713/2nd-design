@@ -32,8 +32,6 @@ const AI = () => {
   const styleOptions = [
     { value: "casual", label: "Casual", icon: <Shirt /> },
     { value: "smart-casual", label: "Smart Casual", icon: <ShoppingBag /> },
-    { value: "business-casual", label: "Business Casual", icon: <Backpack /> },
-    { value: "business-formal", label: "Business Formal", icon: <Award /> },
     { value: "formal", label: "Formal", icon: <Sparkles /> },
   ];
 
@@ -93,22 +91,6 @@ const AI = () => {
           items: {
             "Long Sleeve": ["Button-down Oxford", "Casual Dress Shirt", "Knit Polo", "Fine Merino Sweater"],
             "Long Pants": ["Dark Wash Jeans", "Tailored Chinos", "Wool-blend Trousers", "Premium Denim"]
-          }
-        },
-        "business-casual": {
-          themes: ["Office Ready", "Professional Casual", "Workday Style", "Business Meeting", "Corporate Casual"],
-          items: {
-            "Long Sleeve": ["Crisp Button-down", "Tattersall Shirt", "Gingham Check Shirt", "Light Blue Oxford"],
-            "Long Pants": ["Gray Wool Trousers", "Navy Chinos", "Khaki Dress Pants", "Charcoal Slacks"],
-            "Shoes": ["Penny Loafers", "Leather Derbies", "Cap-toe Oxfords", "Suede Brogues"]
-          }
-        },
-        "business-formal": {
-          themes: ["Boardroom Ready", "Executive Style", "Corporate Attire", "Professional Look", "Business Proper"],
-          items: {
-            "Long Sleeve": ["French Cuff Shirt", "Spread Collar Shirt", "Pinpoint Oxford", "Twill Dress Shirt"],
-            "Long Pants": ["Wool Suit Trousers", "Pleated Dress Pants", "Tailored Slacks", "Pin-striped Pants"],
-            "Outerwear": ["Tailored Blazer", "Wool Suit Jacket", "Navy Sport Coat", "Structured Jacket"]
           }
         },
         formal: {
