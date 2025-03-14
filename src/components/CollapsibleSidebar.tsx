@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shirt, Home, Brain, Info, User, Settings, ChevronRight } from 'lucide-react';
+import { Shirt, Home, Brain, Info, User, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from './ui/button';
 import { useSidebar } from './ui/sidebar';
 
@@ -57,7 +57,7 @@ const CollapsibleSidebar = () => {
               onClick={toggleSidebar} 
               className="ml-auto p-1.5 rounded-md hover:bg-muted transition-colors"
             >
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              <ChevronLeft className="w-5 h-5 text-muted-foreground" />
             </button>
           )}
         </div>
@@ -116,7 +116,7 @@ const CollapsibleSidebar = () => {
       
       {/* Add a floating expand button that shows only when sidebar is collapsed */}
       {isCollapsed && (
-        <div className="fixed left-0 top-5 z-20 ml-2 md:flex hidden">
+        <div className="fixed left-16 top-5 z-20">
           <Button 
             size="icon" 
             variant="outline" 
