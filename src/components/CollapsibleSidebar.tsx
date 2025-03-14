@@ -10,9 +10,10 @@ interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   active: boolean;
+  isCollapsed: boolean;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, active }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, active, isCollapsed }) => {
   return (
     <li>
       <Link
@@ -21,10 +22,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, active }) =>
           active
             ? 'bg-primary/10 text-primary font-medium'
             : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-        }`}
+        } ${isCollapsed ? 'justify-center' : ''}`}
       >
         {icon}
-        <span>{label}</span>
+        {!isCollapsed && <span>{label}</span>}
       </Link>
     </li>
   );
@@ -40,6 +41,9 @@ const CollapsibleSidebar = () => {
   
   // When sidebar is collapsed, we show a minimal version
   const isCollapsed = state === "collapsed";
+  
+  // Determine icon size based on sidebar state
+  const iconSize = isCollapsed ? 24 : 20;
   
   return (
     <>
@@ -66,27 +70,31 @@ const CollapsibleSidebar = () => {
           <ul className="space-y-2">
             <SidebarItem 
               to="/home" 
-              icon={<Home size={20} />} 
-              label={isCollapsed ? "" : "Home"} 
+              icon={<Home size={iconSize} />} 
+              label="Home" 
               active={isActive('/home')} 
+              isCollapsed={isCollapsed}
             />
             <SidebarItem 
               to="/wardrobe" 
-              icon={<Shirt size={20} />} 
-              label={isCollapsed ? "" : "Wardrobe"} 
+              icon={<Shirt size={iconSize} />} 
+              label="Wardrobe" 
               active={isActive('/wardrobe')} 
+              isCollapsed={isCollapsed}
             />
             <SidebarItem 
               to="/ai" 
-              icon={<Brain size={20} />} 
-              label={isCollapsed ? "" : "AI Suggestions"} 
+              icon={<Brain size={iconSize} />} 
+              label="AI Suggestions" 
               active={isActive('/ai')} 
+              isCollapsed={isCollapsed}
             />
             <SidebarItem 
               to="/about" 
-              icon={<Info size={20} />} 
-              label={isCollapsed ? "" : "About"} 
+              icon={<Info size={iconSize} />} 
+              label="About" 
               active={isActive('/about')} 
+              isCollapsed={isCollapsed}
             />
           </ul>
           
@@ -99,15 +107,17 @@ const CollapsibleSidebar = () => {
             <ul className="space-y-2">
               <SidebarItem 
                 to="/account" 
-                icon={<User size={20} />} 
-                label={isCollapsed ? "" : "Account"} 
+                icon={<User size={iconSize} />} 
+                label="Account" 
                 active={isActive('/account')} 
+                isCollapsed={isCollapsed}
               />
               <SidebarItem 
                 to="/settings" 
-                icon={<Settings size={20} />} 
-                label={isCollapsed ? "" : "Settings"} 
+                icon={<Settings size={iconSize} />} 
+                label="Settings" 
                 active={isActive('/settings')} 
+                isCollapsed={isCollapsed}
               />
             </ul>
           </div>
