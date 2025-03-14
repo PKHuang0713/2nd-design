@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,17 +44,14 @@ const LaundrySystem = () => {
     setLaundryItems(prev => 
       prev.map(item => 
         item.id === id 
-          ? { ...item, favorite: !item.favorite } 
+          ? { ...item, favorite: true } 
           : item
       )
     );
     
     const item = laundryItems.find(item => item.id === id);
-    if (item) {
-      const message = item.favorite 
-        ? `${item.name} removed from favorites`
-        : `${item.name} added to favorites`;
-      toast(message);
+    if (item && !item.favorite) {
+      toast(`${item.name} added to favorites`);
     }
   };
 
@@ -116,15 +112,17 @@ const LaundrySystem = () => {
         </div>
       </CardContent>
       <CardFooter className="flex flex-wrap gap-2 pt-2">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => toggleFavorite(item.id)}
-          className={`${item.favorite ? 'bg-pink-100 text-pink-800' : 'bg-gray-100 text-gray-800'} hover:bg-opacity-90`}
-        >
-          <Heart className="h-4 w-4 mr-2" fill={item.favorite ? "currentColor" : "none"} /> 
-          {item.favorite ? "Unfavorite" : "Favorite"}
-        </Button>
+        {!item.favorite && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => toggleFavorite(item.id)}
+            className="bg-pink-100 text-pink-800 hover:bg-pink-200"
+          >
+            <Heart className="h-4 w-4 mr-2" /> 
+            Add to Favorites
+          </Button>
+        )}
         
         {item.status !== 'dirty' && (
           <Button 
