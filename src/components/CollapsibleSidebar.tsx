@@ -1,22 +1,34 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarHeader, 
-  SidebarFooter,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger,
-  SidebarGroupLabel,
-  SidebarGroup,
-  SidebarRail,
-  useSidebar
-} from './ui/sidebar';
 import { Shirt, Home, Brain, Info, User, Settings, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
+import { useSidebar } from './ui/sidebar';
+
+interface SidebarItemProps {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+}
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label, active }) => {
+  return (
+    <li>
+      <Link
+        to={to}
+        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+          active
+            ? 'bg-primary/10 text-primary font-medium'
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+        }`}
+      >
+        {icon}
+        <span>{label}</span>
+      </Link>
+    </li>
+  );
+};
 
 const CollapsibleSidebar = () => {
   const location = useLocation();
@@ -26,97 +38,84 @@ const CollapsibleSidebar = () => {
     return location.pathname === path;
   };
   
+  // When sidebar is collapsed, we show a minimal version
+  const isCollapsed = state === "collapsed";
+  
   return (
     <>
-      <Sidebar>
-        <SidebarHeader>
-          <div className="h-16 flex items-center px-4 justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <Shirt className="w-6 h-6 text-wardrobe-blue" />
-              <span className="font-semibold text-lg">Clothify</span>
-            </Link>
-            <SidebarTrigger />
-          </div>
-        </SidebarHeader>
-        
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>NAVIGATION</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/home')} tooltip="Home">
-                  <Link to="/home">
-                    <Home size={20} />
-                    <span>Home</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/wardrobe')} tooltip="Wardrobe">
-                  <Link to="/wardrobe">
-                    <Shirt size={20} />
-                    <span>Wardrobe</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/ai')} tooltip="AI Suggestions">
-                  <Link to="/ai">
-                    <Brain size={20} />
-                    <span>AI Suggestions</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/about')} tooltip="About">
-                  <Link to="/about">
-                    <Info size={20} />
-                    <span>About</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroup>
+      <aside 
+        className={`${isCollapsed ? 'w-16' : 'w-64'} min-h-screen bg-white border-r border-border transition-all duration-300 ease-in-out`}
+      >
+        <div className="h-16 border-b border-border flex items-center px-6">
+          <Link to="/" className="flex items-center gap-2">
+            <Shirt className="w-6 h-6 text-wardrobe-blue" />
+            {!isCollapsed && <span className="font-semibold text-lg">Clothify</span>}
+          </Link>
           
-          <SidebarGroup>
-            <SidebarGroupLabel>USER</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/account')} tooltip="Account">
-                  <Link to="/account">
-                    <User size={20} />
-                    <span>Account</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/settings')} tooltip="Settings">
-                  <Link to="/settings">
-                    <Settings size={20} />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroup>
-        </SidebarContent>
+          {!isCollapsed && (
+            <button 
+              onClick={toggleSidebar} 
+              className="ml-auto p-1.5 rounded-md hover:bg-muted transition-colors"
+            >
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </button>
+          )}
+        </div>
         
-        <SidebarFooter>
-          <div className="p-2 text-xs text-muted-foreground">
-            Clothify v1.0.0
+        <nav className={`p-4 ${isCollapsed ? 'px-2' : ''}`}>
+          <ul className="space-y-2">
+            <SidebarItem 
+              to="/home" 
+              icon={<Home size={20} />} 
+              label={isCollapsed ? "" : "Home"} 
+              active={isActive('/home')} 
+            />
+            <SidebarItem 
+              to="/wardrobe" 
+              icon={<Shirt size={20} />} 
+              label={isCollapsed ? "" : "Wardrobe"} 
+              active={isActive('/wardrobe')} 
+            />
+            <SidebarItem 
+              to="/ai" 
+              icon={<Brain size={20} />} 
+              label={isCollapsed ? "" : "AI Suggestions"} 
+              active={isActive('/ai')} 
+            />
+            <SidebarItem 
+              to="/about" 
+              icon={<Info size={20} />} 
+              label={isCollapsed ? "" : "About"} 
+              active={isActive('/about')} 
+            />
+          </ul>
+          
+          <div className="pt-8">
+            {!isCollapsed && (
+              <div className="text-xs font-semibold text-muted-foreground mb-2 px-3">
+                USER
+              </div>
+            )}
+            <ul className="space-y-2">
+              <SidebarItem 
+                to="/account" 
+                icon={<User size={20} />} 
+                label={isCollapsed ? "" : "Account"} 
+                active={isActive('/account')} 
+              />
+              <SidebarItem 
+                to="/settings" 
+                icon={<Settings size={20} />} 
+                label={isCollapsed ? "" : "Settings"} 
+                active={isActive('/settings')} 
+              />
+            </ul>
           </div>
-        </SidebarFooter>
-        
-        {/* Add the rail to make the sidebar resizable/expandable when collapsed */}
-        <SidebarRail />
-      </Sidebar>
+        </nav>
+      </aside>
       
       {/* Add a floating expand button that shows only when sidebar is collapsed */}
-      {state === "collapsed" && (
+      {isCollapsed && (
         <div className="fixed left-0 top-5 z-20 ml-2 md:flex hidden">
           <Button 
             size="icon" 
