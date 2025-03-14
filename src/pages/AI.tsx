@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat, Heart, Flame, Award, ShoppingBag, TreeDeciduous, Star } from 'lucide-react';
+import { Shirt, Sparkles, RefreshCw, Backpack, Footprints, HardHat, Heart, Award, ShoppingBag } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,16 +27,14 @@ const AI = () => {
   const [outfits, setOutfits] = useState<Array<{id: number, name: string, items: string[], types: string[], saved: boolean}>>([]);
   const [selectedOutfit, setSelectedOutfit] = useState<{id: number, name: string, items: string[], types: string[]} | null>(null);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState<string>("casual");
+  const [selectedStyle, setSelectedStyle] = useState<string>("smart-casual");
 
   const styleOptions = [
     { value: "casual", label: "Casual", icon: <Shirt /> },
-    { value: "formal", label: "Formal", icon: <Award /> },
-    { value: "glamorous", label: "Glamorous", icon: <Sparkles /> },
-    { value: "trendy", label: "Trendy", icon: <ShoppingBag /> },
-    { value: "earthy", label: "Earthy", icon: <TreeDeciduous /> },
-    { value: "edgy", label: "Edgy", icon: <Flame /> },
-    { value: "classic", label: "Classic", icon: <Star /> },
+    { value: "smart-casual", label: "Smart Casual", icon: <ShoppingBag /> },
+    { value: "business-casual", label: "Business Casual", icon: <Backpack /> },
+    { value: "business-formal", label: "Business Formal", icon: <Award /> },
+    { value: "formal", label: "Formal", icon: <Sparkles /> },
   ];
 
   const getClothingIcon = (type: string) => {
@@ -86,50 +84,39 @@ const AI = () => {
           themes: ["Weekend Casual", "Everyday Comfort", "Relaxed Look", "Casual Outing", "Laid-back Style"],
           items: {
             "Short Sleeve": ["Relaxed T-Shirt", "Casual Polo", "Vintage Tee", "Comfortable Henley"],
-            "Shoes": ["Casual Sneakers", "Slip-on Shoes", "Canvas Shoes", "Comfortable Loafers"]
+            "Shoes": ["Casual Sneakers", "Slip-on Shoes", "Canvas Shoes", "Comfortable Loafers"],
+            "Long Pants": ["Distressed Jeans", "Cargo Pants", "Track Pants", "Joggers"]
+          }
+        },
+        "smart-casual": {
+          themes: ["Polished Casual", "Elevated Weekend", "Smart Comfort", "Refined Casual", "Dressed-down Chic"],
+          items: {
+            "Long Sleeve": ["Button-down Oxford", "Casual Dress Shirt", "Knit Polo", "Fine Merino Sweater"],
+            "Long Pants": ["Dark Wash Jeans", "Tailored Chinos", "Wool-blend Trousers", "Premium Denim"]
+          }
+        },
+        "business-casual": {
+          themes: ["Office Ready", "Professional Casual", "Workday Style", "Business Meeting", "Corporate Casual"],
+          items: {
+            "Long Sleeve": ["Crisp Button-down", "Tattersall Shirt", "Gingham Check Shirt", "Light Blue Oxford"],
+            "Long Pants": ["Gray Wool Trousers", "Navy Chinos", "Khaki Dress Pants", "Charcoal Slacks"],
+            "Shoes": ["Penny Loafers", "Leather Derbies", "Cap-toe Oxfords", "Suede Brogues"]
+          }
+        },
+        "business-formal": {
+          themes: ["Boardroom Ready", "Executive Style", "Corporate Attire", "Professional Look", "Business Proper"],
+          items: {
+            "Long Sleeve": ["French Cuff Shirt", "Spread Collar Shirt", "Pinpoint Oxford", "Twill Dress Shirt"],
+            "Long Pants": ["Wool Suit Trousers", "Pleated Dress Pants", "Tailored Slacks", "Pin-striped Pants"],
+            "Outerwear": ["Tailored Blazer", "Wool Suit Jacket", "Navy Sport Coat", "Structured Jacket"]
           }
         },
         formal: {
-          themes: ["Business Formal", "Elegant Evening", "Professional Look", "Sophisticated Style", "Executive Outfit"],
+          themes: ["Black Tie Event", "Elegant Evening", "Formal Occasion", "Sophisticated Gala", "Special Ceremony"],
           items: {
-            "Long Sleeve": ["Crisp Dress Shirt", "French Cuff Shirt", "Tailored Shirt", "Fine Cotton Shirt"],
-            "Long Pants": ["Wool Dress Pants", "Tailored Trousers", "Formal Slacks", "Pressed Suit Pants"],
-            "Shoes": ["Oxford Shoes", "Cap-toe Dress Shoes", "Brogue Shoes", "Polished Loafers"]
-          }
-        },
-        glamorous: {
-          themes: ["Night Out", "Statement Look", "Eye-catching Style", "Bold Glamour", "Luxury Outfit"],
-          items: {
-            "Outerwear": ["Sequined Jacket", "Velvet Blazer", "Designer Coat", "Satin Finish Jacket"],
-            "Long Sleeve": ["Silk Shirt", "Embellished Top", "Luxury Blouse", "Shiny Fabric Shirt"]
-          }
-        },
-        trendy: {
-          themes: ["Fashion Forward", "This Season's Look", "Trending Style", "Current Fashion", "Street Style"],
-          items: {
-            "Short Sleeve": ["Oversized Tee", "Cropped Top", "Designer Graphic Shirt", "Limited Edition Tee"],
-            "Shoes": ["Chunky Sneakers", "Platform Shoes", "Designer Collaborations", "Trending Footwear"]
-          }
-        },
-        earthy: {
-          themes: ["Natural Style", "Earth Tones", "Sustainable Look", "Eco-friendly Outfit", "Organic Fashion"],
-          items: {
-            "Long Sleeve": ["Linen Shirt", "Organic Cotton Top", "Neutral Tone Henley", "Bamboo Fabric Shirt"],
-            "Long Pants": ["Hemp Pants", "Natural Dye Jeans", "Earthy Tone Chinos", "Sustainable Trousers"]
-          }
-        },
-        edgy: {
-          themes: ["Bold Statement", "Urban Edge", "Rebellious Look", "Alternative Style", "Daring Fashion"],
-          items: {
-            "Outerwear": ["Leather Jacket", "Distressed Denim Jacket", "Dark Overcoat", "Military-inspired Jacket"],
-            "Short Sleeve": ["Band Tee", "Graphic Print", "Distressed Shirt", "Statement Text Tee"]
-          }
-        },
-        classic: {
-          themes: ["Timeless Style", "Traditional Look", "Enduring Fashion", "Heritage Outfit", "Ageless Elegance"],
-          items: {
-            "Long Sleeve": ["White Oxford Shirt", "Blue Striped Button-down", "Classic Check Shirt", "Navy Polo"],
-            "Long Pants": ["Straight Leg Chinos", "Tailored Wool Pants", "Classic Cut Jeans", "Traditional Trousers"]
+            "Long Sleeve": ["Crisp Tuxedo Shirt", "Wing Collar Shirt", "French Cuff Evening Shirt", "Formal Dress Shirt"],
+            "Long Pants": ["Wool Tuxedo Trousers", "Formal Black Pants", "Satin-striped Pants", "Tailored Suit Pants"],
+            "Shoes": ["Patent Leather Oxfords", "Formal Dress Shoes", "Evening Loafers", "Polished Black Shoes"]
           }
         }
       };
@@ -163,7 +150,7 @@ const AI = () => {
       
       setOutfits(newOutfits);
       setLoading(false);
-      toast.success(`${selectedStyle.charAt(0).toUpperCase() + selectedStyle.slice(1)} outfit suggestions generated!`);
+      toast.success(`${selectedStyle.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} outfit suggestions generated!`);
     }, 1500);
   };
 
