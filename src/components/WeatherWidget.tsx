@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 
-// OpenWeather API key - this is a public API key that can be stored in the codebase
-const API_KEY = 'YOUR_OPENWEATHER_API_KEY'; // Replace with your API key
+// OpenWeather API key
+const API_KEY = '0fef69100f0adcafbe5a1d41e049470'; 
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 interface WeatherData {
