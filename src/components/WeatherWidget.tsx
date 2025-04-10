@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 // OpenWeather API key
-const API_KEY = '0fef69100f0adcafbe5a1d41e049470'; 
+const API_KEY = 'ea3fbddbdf3b9ae1769eb8e57ba66af8'; 
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 interface WeatherData {
