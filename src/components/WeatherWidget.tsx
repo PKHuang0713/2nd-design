@@ -1,17 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun, MapPin } from 'lucide-react';
+import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun, MapPin, AlertTriangle } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 // OpenWeather API key
 const API_KEY = 'ea3fbddbdf3b9ae1769eb8e57ba66af8'; 
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
 // Predefined locations for the dropdown
 const LOCATIONS = [
+  // Major global cities
   "New York",
   "London",
   "Tokyo",
@@ -21,7 +24,14 @@ const LOCATIONS = [
   "Toronto",
   "Madrid",
   "Rome",
-  "Amsterdam"
+  "Amsterdam",
+  // Taiwan cities
+  "Taipei",
+  "Kaohsiung",
+  "Taichung",
+  "Tainan",
+  "Hsinchu",
+  "Taoyuan"
 ];
 
 interface WeatherData {
@@ -40,38 +50,76 @@ interface WeatherData {
   name: string;
 }
 
+interface ForecastData {
+  list: {
+    dt: number;
+    main: {
+      temp: number;
+    };
+    weather: {
+      id: number;
+      main: string;
+      description: string;
+    }[];
+  }[];
+}
+
 const WeatherWidget: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [rainWarning, setRainWarning] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [location, setLocation] = useState<string>('New York'); // Default location
+  const [location, setLocation] = useState<string>('Taipei'); // Default to Taipei
 
   useEffect(() => {
-    const fetchWeather = async () => {
+    const fetchWeatherAndForecast = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
+        // Fetch current weather
+        const weatherResponse = await fetch(
           `${BASE_URL}?q=${location}&units=metric&appid=${API_KEY}`
         );
         
-        if (!response.ok) {
-          const errorData = await response.json();
+        if (!weatherResponse.ok) {
+          const errorData = await weatherResponse.json();
           throw new Error(errorData.message || 'Weather data not available');
         }
         
-        const data = await response.json();
-        setWeatherData(data);
+        const weatherData = await weatherResponse.json();
+        setWeatherData(weatherData);
+        
+        // Fetch forecast data to check for rain later
+        const forecastResponse = await fetch(
+          `${FORECAST_URL}?q=${location}&units=metric&appid=${API_KEY}`
+        );
+        
+        if (!forecastResponse.ok) {
+          throw new Error('Forecast data not available');
+        }
+        
+        const forecastData: ForecastData = await forecastResponse.json();
+        
+        // Check if rain is expected in the next 24 hours
+        const willRainLater = forecastData.list
+          .slice(0, 8) // Next 24 hours (3-hour steps)
+          .some(item => {
+            const weatherId = item.weather[0].id;
+            return (weatherId >= 200 && weatherId < 600); // Rain/storm codes
+          });
+        
+        setRainWarning(willRainLater);
         setError(null);
         
         // Success toast
         toast.success('Weather Updated', {
-          description: `Latest weather for ${data.name}`,
+          description: `Latest weather for ${weatherData.name}`,
         });
       } catch (err) {
         console.error('Error fetching weather:', err);
         const errorMessage = err instanceof Error ? err.message : 'Could not fetch weather data';
         setError(errorMessage);
         setWeatherData(null);
+        setRainWarning(false);
         
         // Add a toast notification for the error
         toast.error('Weather Update Failed', {
@@ -82,7 +130,7 @@ const WeatherWidget: React.FC = () => {
       }
     };
 
-    fetchWeather();
+    fetchWeatherAndForecast();
   }, [location]);
 
   const handleLocationChange = (newLocation: string) => {
@@ -168,6 +216,16 @@ const WeatherWidget: React.FC = () => {
                 <span className="text-sm">{weatherData.wind.speed} m/s wind</span>
               </div>
             </div>
+            
+            {rainWarning && (
+              <Alert variant="default" className="mt-2 bg-amber-50 border-amber-200 text-amber-800">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Rain Expected</AlertTitle>
+                <AlertDescription>
+                  Rain is forecasted later today. Consider indoor drying options.
+                </AlertDescription>
+              </Alert>
+            )}
             
             <div className="mt-3">
               <Badge 
