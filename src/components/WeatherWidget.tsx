@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun, MapPin, AlertTriangle, Clock } from 'lucide-react';
@@ -104,12 +103,54 @@ const WeatherWidget: React.FC = () => {
         
         const forecastData: ForecastData = await forecastResponse.json();
         
-        // Filter and process forecast data to get 3-hour intervals
-        const filteredForecast = forecastData.list.slice(0, 8); // Next 24 hours (3-hour steps)
+        // Process forecast data for 1-hour intervals
+        // OpenWeather free API only provides 3-hour intervals
+        // So we need to interpolate data to get 1-hour intervals
+        const originalForecast = forecastData.list.slice(0, 8); // Get 24 hours of data (8 points at 3h intervals)
+        const hourlyForecast: ForecastItem[] = [];
+        
+        // Interpolate data to get hourly forecast
+        for (let i = 0; i < originalForecast.length - 1; i++) {
+          const current = originalForecast[i];
+          const next = originalForecast[i + 1];
+          
+          // Add the current 3-hour point
+          hourlyForecast.push(current);
+          
+          // Create two interpolated hours between each 3-hour point
+          for (let hour = 1; hour <= 2; hour++) {
+            // Calculate interpolated timestamp
+            const currentTime = new Date(current.dt_txt).getTime();
+            const nextTime = new Date(next.dt_txt).getTime();
+            const step = (nextTime - currentTime) / 3; // 3 hours difference
+            const interpolatedTime = new Date(currentTime + (step * hour));
+            
+            // Calculate interpolated temperature (linear interpolation)
+            const tempDiff = next.main.temp - current.main.temp;
+            const interpolatedTemp = current.main.temp + (tempDiff * (hour / 3));
+            
+            // Create interpolated forecast item
+            // We'll use the weather condition from the nearest 3-hour point for simplicity
+            hourlyForecast.push({
+              dt: Math.floor(interpolatedTime.getTime() / 1000),
+              main: {
+                temp: interpolatedTemp
+              },
+              weather: current.weather, // Using weather from the nearest 3-hour point
+              dt_txt: interpolatedTime.toISOString()
+            });
+          }
+        }
+        
+        // Add the last 3-hour point
+        hourlyForecast.push(originalForecast[originalForecast.length - 1]);
+        
+        // Limit to 24 hours (24 points)
+        const filteredForecast = hourlyForecast.slice(0, 24);
         setForecastData(filteredForecast);
         
         // Check if rain is expected in the next 24 hours
-        const willRainLater = filteredForecast.some(item => {
+        const willRainLater = originalForecast.some(item => {
           const weatherId = item.weather[0].id;
           return (weatherId >= 200 && weatherId < 600); // Rain/storm codes
         });
@@ -256,28 +297,28 @@ const WeatherWidget: React.FC = () => {
               </Badge>
             </div>
             
-            {/* 3-Hour Forecast Section */}
+            {/* 1-Hour Forecast Section */}
             {forecastData && forecastData.length > 0 && (
               <>
                 <Separator className="my-3" />
                 <div className="mt-3">
                   <h4 className="text-sm font-medium mb-2 flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
-                    3-Hour Forecast
+                    1-Hour Forecast
                   </h4>
                   <div className="overflow-x-auto">
                     <div className="flex gap-2 pb-2">
                       {forecastData.map((item, index) => (
                         <div 
                           key={index} 
-                          className="flex flex-col items-center min-w-16 p-2 rounded-md bg-muted/30"
+                          className="flex flex-col items-center min-w-14 p-2 rounded-md bg-muted/30"
                         >
                           <span className="text-xs font-medium">{formatTime(item.dt_txt)}</span>
                           <div className="my-1">
                             {getWeatherIcon(item.weather[0].id)}
                           </div>
                           <span className="text-sm font-medium">{Math.round(item.main.temp)}°C</span>
-                          <span className="text-xs text-muted-foreground truncate max-w-16 text-center">
+                          <span className="text-xs text-muted-foreground truncate max-w-14 text-center">
                             {item.weather[0].description}
                           </span>
                         </div>
