@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 // OpenWeather API key
 const API_KEY = '0fef69100f0adcafbe5a1d41e049470'; 
@@ -39,7 +40,8 @@ const WeatherWidget: React.FC = () => {
         );
         
         if (!response.ok) {
-          throw new Error('Weather data not available');
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Weather data not available');
         }
         
         const data = await response.json();
@@ -47,8 +49,14 @@ const WeatherWidget: React.FC = () => {
         setError(null);
       } catch (err) {
         console.error('Error fetching weather:', err);
-        setError('Could not fetch weather data');
+        const errorMessage = err instanceof Error ? err.message : 'Could not fetch weather data';
+        setError(errorMessage);
         setWeatherData(null);
+        
+        // Add a toast notification for the error
+        toast.error('Weather Update Failed', {
+          description: errorMessage,
+        });
       } finally {
         setLoading(false);
       }
@@ -143,3 +151,4 @@ const WeatherWidget: React.FC = () => {
 };
 
 export default WeatherWidget;
+
