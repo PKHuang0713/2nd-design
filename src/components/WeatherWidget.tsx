@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun, MapPin, AlertTriangle } from 'lucide-react';
+import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun, MapPin, AlertTriangle, Clock } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 
 // OpenWeather API key
 const API_KEY = 'ea3fbddbdf3b9ae1769eb8e57ba66af8'; 
@@ -50,22 +51,26 @@ interface WeatherData {
   name: string;
 }
 
-interface ForecastData {
-  list: {
-    dt: number;
-    main: {
-      temp: number;
-    };
-    weather: {
-      id: number;
-      main: string;
-      description: string;
-    }[];
+interface ForecastItem {
+  dt: number;
+  main: {
+    temp: number;
+  };
+  weather: {
+    id: number;
+    main: string;
+    description: string;
   }[];
+  dt_txt: string;
+}
+
+interface ForecastData {
+  list: ForecastItem[];
 }
 
 const WeatherWidget: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [forecastData, setForecastData] = useState<ForecastItem[] | null>(null);
   const [rainWarning, setRainWarning] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -99,13 +104,15 @@ const WeatherWidget: React.FC = () => {
         
         const forecastData: ForecastData = await forecastResponse.json();
         
+        // Filter and process forecast data to get 3-hour intervals
+        const filteredForecast = forecastData.list.slice(0, 8); // Next 24 hours (3-hour steps)
+        setForecastData(filteredForecast);
+        
         // Check if rain is expected in the next 24 hours
-        const willRainLater = forecastData.list
-          .slice(0, 8) // Next 24 hours (3-hour steps)
-          .some(item => {
-            const weatherId = item.weather[0].id;
-            return (weatherId >= 200 && weatherId < 600); // Rain/storm codes
-          });
+        const willRainLater = filteredForecast.some(item => {
+          const weatherId = item.weather[0].id;
+          return (weatherId >= 200 && weatherId < 600); // Rain/storm codes
+        });
         
         setRainWarning(willRainLater);
         setError(null);
@@ -164,6 +171,12 @@ const WeatherWidget: React.FC = () => {
     if (weatherId === 800) return "Perfect for drying outside!";
     if (weatherId > 800 && weatherId < 804) return "Good for drying outside";
     return "Check conditions before drying outside";
+  };
+
+  // Format the time from the API response
+  const formatTime = (dtTxt: string): string => {
+    const date = new Date(dtTxt);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   return (
@@ -242,6 +255,38 @@ const WeatherWidget: React.FC = () => {
                 {getWeatherCondition(weatherData.weather[0].id)}
               </Badge>
             </div>
+            
+            {/* 3-Hour Forecast Section */}
+            {forecastData && forecastData.length > 0 && (
+              <>
+                <Separator className="my-3" />
+                <div className="mt-3">
+                  <h4 className="text-sm font-medium mb-2 flex items-center">
+                    <Clock className="h-4 w-4 mr-1" />
+                    3-Hour Forecast
+                  </h4>
+                  <div className="overflow-x-auto">
+                    <div className="flex gap-2 pb-2">
+                      {forecastData.map((item, index) => (
+                        <div 
+                          key={index} 
+                          className="flex flex-col items-center min-w-16 p-2 rounded-md bg-muted/30"
+                        >
+                          <span className="text-xs font-medium">{formatTime(item.dt_txt)}</span>
+                          <div className="my-1">
+                            {getWeatherIcon(item.weather[0].id)}
+                          </div>
+                          <span className="text-sm font-medium">{Math.round(item.main.temp)}°C</span>
+                          <span className="text-xs text-muted-foreground truncate max-w-16 text-center">
+                            {item.weather[0].description}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </CardContent>
