@@ -1,13 +1,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun } from 'lucide-react';
+import { CloudSun, CloudRain, Sun, CloudSnow, Cloud, Wind, Droplets, ThermometerSun, MapPin } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // OpenWeather API key
 const API_KEY = 'ea3fbddbdf3b9ae1769eb8e57ba66af8'; 
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+// Predefined locations for the dropdown
+const LOCATIONS = [
+  "New York",
+  "London",
+  "Tokyo",
+  "Sydney",
+  "Paris",
+  "Berlin",
+  "Toronto",
+  "Madrid",
+  "Rome",
+  "Amsterdam"
+];
 
 interface WeatherData {
   main: {
@@ -47,6 +62,11 @@ const WeatherWidget: React.FC = () => {
         const data = await response.json();
         setWeatherData(data);
         setError(null);
+        
+        // Success toast
+        toast.success('Weather Updated', {
+          description: `Latest weather for ${data.name}`,
+        });
       } catch (err) {
         console.error('Error fetching weather:', err);
         const errorMessage = err instanceof Error ? err.message : 'Could not fetch weather data';
@@ -64,6 +84,10 @@ const WeatherWidget: React.FC = () => {
 
     fetchWeather();
   }, [location]);
+
+  const handleLocationChange = (newLocation: string) => {
+    setLocation(newLocation);
+  };
 
   const getWeatherIcon = (weatherId: number) => {
     // Weather condition codes: https://openweathermap.org/weather-conditions
@@ -97,14 +121,31 @@ const WeatherWidget: React.FC = () => {
   return (
     <Card className="mb-6">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Weather & Drying Conditions</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg">Weather & Drying Conditions</CardTitle>
+          <div className="flex items-center">
+            <MapPin className="h-4 w-4 mr-1 text-muted-foreground" />
+            <Select value={location} onValueChange={handleLocationChange}>
+              <SelectTrigger className="w-[160px] h-8">
+                <SelectValue placeholder="Select location" />
+              </SelectTrigger>
+              <SelectContent>
+                {LOCATIONS.map((loc) => (
+                  <SelectItem key={loc} value={loc}>
+                    {loc}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
-        {loading && <p>Loading weather data...</p>}
+        {loading && <p className="text-center py-4">Loading weather data...</p>}
         
-        {error && <p className="text-destructive">{error}</p>}
+        {error && <p className="text-destructive text-center py-4">{error}</p>}
         
-        {weatherData && (
+        {weatherData && !loading && (
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -151,4 +192,3 @@ const WeatherWidget: React.FC = () => {
 };
 
 export default WeatherWidget;
-
