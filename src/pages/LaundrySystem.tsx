@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Shirt, Droplets, Sun, Calendar, Clock, CheckCircle, AlertCircle, Heart } from 'lucide-react';
 import { toast } from "sonner";
+import WeatherWidget from "@/components/WeatherWidget";
 
 interface LaundryItem {
   id: string;
@@ -164,6 +165,11 @@ const LaundrySystem = () => {
         <p className="text-muted-foreground">
           Track your clothing through the laundry cycle from dirty to clean.
         </p>
+      </div>
+
+      {/* Weather Widget */}
+      <div className="mt-6">
+        <WeatherWidget />
       </div>
 
       <Tabs defaultValue="all" className="mt-6">
