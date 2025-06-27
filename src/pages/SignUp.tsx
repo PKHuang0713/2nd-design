@@ -1,21 +1,32 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from "sonner";
+import { useAuth } from '@/contexts/AuthContext';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { signUp, user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user) {
+      navigate('/home');
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !password || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      toast.error("Please fill in all required fields");
       return;
     }
     
@@ -24,9 +35,33 @@ const SignUp = () => {
       return;
     }
 
-    // Mock signup success
-    toast.success("Account created successfully!");
-    navigate('/home');
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await signUp(email, password, fullName);
+      
+      if (error) {
+        if (error.message?.includes('already registered')) {
+          toast.error("This email is already registered. Please sign in instead.");
+        } else if (error.message?.includes('Invalid email')) {
+          toast.error("Please enter a valid email address");
+        } else {
+          toast.error(error.message || "Failed to create account");
+        }
+      } else {
+        toast.success("Account created successfully! Please check your email to verify your account.");
+        navigate('/signin');
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,10 +70,20 @@ const SignUp = () => {
         <div className="glass-card p-8 animate-scale-in">
           <div className="blue-card mb-8">
             <h1 className="text-2xl font-semibold mb-1">Welcome,</h1>
-            <p className="text-white/80">Sign up to continue</p>
+            <p className="text-white/80">Create your account to continue</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <input
+                type="text"
+                placeholder="Full Name (optional)"
+                className="form-input"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
+
             <div>
               <input
                 type="email"
@@ -46,6 +91,7 @@ const SignUp = () => {
                 className="form-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             
@@ -56,6 +102,8 @@ const SignUp = () => {
                 className="form-input pr-10"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
               />
               <button
                 type="button"
@@ -73,11 +121,17 @@ const SignUp = () => {
                 className="form-input"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
             </div>
             
-            <button type="submit" className="w-full btn-primary flex items-center justify-center gap-2">
-              Continue <ArrowRight size={16} />
+            <button 
+              type="submit" 
+              className="w-full btn-primary flex items-center justify-center gap-2"
+              disabled={loading}
+            >
+              {loading ? 'Creating Account...' : 'Create Account'} 
+              {!loading && <ArrowRight size={16} />}
             </button>
           </form>
           
@@ -98,7 +152,6 @@ const SignUp = () => {
         </div>
       </div>
       
-      {/* Illustration */}
       <div className="hidden lg:block fixed bottom-0 right-0 p-8">
         <img 
           src="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png" 

@@ -2,8 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
+  const { profile } = useAuth();
+
   return (
     <header className="h-16 border-b border-border bg-white">
       <div className="flex items-center justify-end h-full px-6">
@@ -12,7 +15,9 @@ const Navbar = () => {
             <div className="w-8 h-8 rounded-full bg-wardrobe-blue flex items-center justify-center text-white">
               <User className="w-4 h-4" />
             </div>
-            <span className="text-sm font-medium">John Doe</span>
+            <span className="text-sm font-medium">
+              {profile?.full_name || profile?.email || 'User'}
+            </span>
           </Link>
         </div>
       </div>

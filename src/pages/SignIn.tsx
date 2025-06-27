@@ -1,16 +1,26 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from "sonner";
+import { useAuth } from '@/contexts/AuthContext';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { signIn, user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user) {
+      navigate('/home');
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !password) {
@@ -18,9 +28,28 @@ const SignIn = () => {
       return;
     }
 
-    // Mock login success
-    toast.success("Signed in successfully!");
-    navigate('/home');
+    setLoading(true);
+
+    try {
+      const { error } = await signIn(email, password);
+      
+      if (error) {
+        if (error.message?.includes('Invalid login credentials')) {
+          toast.error("Invalid email or password");
+        } else if (error.message?.includes('Email not confirmed')) {
+          toast.error("Please check your email and click the confirmation link");
+        } else {
+          toast.error(error.message || "Failed to sign in");
+        }
+      } else {
+        toast.success("Signed in successfully!");
+        navigate('/home');
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,7 +57,7 @@ const SignIn = () => {
       <div className="w-full max-w-md">
         <div className="glass-card p-8 animate-scale-in">
           <div className="blue-card mb-8">
-            <h1 className="text-2xl font-semibold mb-1">Welcome,</h1>
+            <h1 className="text-2xl font-semibold mb-1">Welcome back,</h1>
             <p className="text-white/80">Sign in to continue</p>
           </div>
           
@@ -40,6 +69,7 @@ const SignIn = () => {
                 className="form-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             
@@ -50,6 +80,7 @@ const SignIn = () => {
                 className="form-input pr-10"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <button
                 type="button"
@@ -60,14 +91,13 @@ const SignIn = () => {
               </button>
             </div>
             
-            <div className="flex justify-end">
-              <Link to="/forgot-password" className="text-sm text-muted-foreground hover:text-wardrobe-blue">
-                Forgot Password?
-              </Link>
-            </div>
-            
-            <button type="submit" className="w-full btn-primary flex items-center justify-center gap-2">
-              Continue <ArrowRight size={16} />
+            <button 
+              type="submit" 
+              className="w-full btn-primary flex items-center justify-center gap-2"
+              disabled={loading}
+            >
+              {loading ? 'Signing In...' : 'Sign In'} 
+              {!loading && <ArrowRight size={16} />}
             </button>
           </form>
           
@@ -88,7 +118,6 @@ const SignIn = () => {
         </div>
       </div>
       
-      {/* Illustration */}
       <div className="hidden lg:block fixed bottom-0 right-0 p-8">
         <img 
           src="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png" 
