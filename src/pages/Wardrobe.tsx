@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Shirt, 
@@ -12,9 +13,13 @@ import {
   Backpack,
   Footprints,
   HardHat,
-  Heart
+  Heart,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import { toast } from "sonner";
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Select,
   SelectContent,
@@ -66,9 +71,11 @@ interface ClothingItem {
   color: string;
   season: string;
   favorite?: boolean;
+  imageUrl?: string;
 }
 
 const Wardrobe = () => {
+  const { user } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [clothingItems, setClothingItems] = useState<ClothingItem[]>([
     { id: 1, name: 'Black T-Shirt', type: 'Short Sleeve', color: 'Black', season: 'All', favorite: false },
@@ -86,6 +93,9 @@ const Wardrobe = () => {
     season: '',
     favorite: false
   });
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
@@ -106,21 +116,89 @@ const Wardrobe = () => {
     { id: 'hats', name: 'Hats', icon: <HardHat size={18} /> },
   ];
 
-  const handleAddItem = () => {
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select a valid image file');
+        return;
+      }
+
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string | null> => {
+    if (!user) {
+      toast.error('You must be logged in to upload images');
+      return null;
+    }
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('clothing-images')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        toast.error('Failed to upload image');
+        return null;
+      }
+
+      const { data } = supabase.storage
+        .from('clothing-images')
+        .getPublicUrl(fileName);
+
+      return data.publicUrl;
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image');
+      return null;
+    }
+  };
+
+  const handleAddItem = async () => {
     if (!newItem.name || !newItem.type) {
       toast.error('Name and type are required');
       return;
+    }
+
+    setIsUploading(true);
+    let imageUrl: string | undefined;
+
+    // Upload image if selected
+    if (selectedImage) {
+      imageUrl = await uploadImage(selectedImage) || undefined;
     }
 
     const newId = clothingItems.length ? Math.max(...clothingItems.map(item => item.id)) + 1 : 1;
     
     setClothingItems([
       ...clothingItems,
-      { id: newId, ...newItem }
+      { id: newId, ...newItem, imageUrl }
     ]);
     
+    // Reset form
     setNewItem({ name: '', type: '', color: '', season: '', favorite: false });
+    setSelectedImage(null);
+    setImagePreview(null);
     setShowAddForm(false);
+    setIsUploading(false);
     toast.success('Item added successfully');
   };
 
@@ -176,6 +254,14 @@ const Wardrobe = () => {
 
   const handleTypeSelect = (value: string) => {
     setNewItem({ ...newItem, type: value });
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    // Reset file input
+    const fileInput = document.getElementById('image-upload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   };
 
   return (
@@ -346,9 +432,38 @@ const Wardrobe = () => {
             </div>
           </div>
 
-          <div className="w-full h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center mb-5">
-            <Plus size={24} className="text-muted-foreground mb-2" />
-            <p className="text-muted-foreground text-sm">Add image</p>
+          <div className="mb-5">
+            <label className="block text-sm font-medium mb-2">Item Photo</label>
+            {!imagePreview ? (
+              <div className="w-full h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-wardrobe-blue transition-colors">
+                <input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
+                />
+                <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center">
+                  <Upload size={24} className="text-muted-foreground mb-2" />
+                  <p className="text-muted-foreground text-sm">Click to upload an image</p>
+                  <p className="text-xs text-muted-foreground mt-1">JPG, PNG, GIF up to 5MB</p>
+                </label>
+              </div>
+            ) : (
+              <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-border">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center mb-4">
@@ -371,14 +486,25 @@ const Wardrobe = () => {
             <button
               onClick={() => setShowAddForm(false)}
               className="btn-outline"
+              disabled={isUploading}
             >
               Cancel
             </button>
             <button
               onClick={handleAddItem}
               className="btn-primary flex items-center gap-2"
+              disabled={isUploading}
             >
-              <Save size={18} /> Save
+              {isUploading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save size={18} /> Save
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -389,7 +515,15 @@ const Wardrobe = () => {
           {filteredItems.map((item) => (
             <div key={item.id} className="glass-card p-4 hover:shadow-lg transition-all duration-300 group">
               <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                <Shirt className="w-16 h-16 text-muted-foreground" />
+                {item.imageUrl ? (
+                  <img 
+                    src={item.imageUrl} 
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Shirt className="w-16 h-16 text-muted-foreground" />
+                )}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                   <button
                     onClick={() => toggleFavorite(item.id)}
@@ -451,4 +585,3 @@ const Wardrobe = () => {
 };
 
 export default Wardrobe;
-
